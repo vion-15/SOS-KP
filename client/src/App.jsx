@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./page/Home";
 import AdminPage from "./page/AdminPage";
 import MenuAdmin from "./page/MenuAdmin";
+import Inventory from "./page/Inventory";
+import AddMenu from "./page/AddMenu";
+import UpdateMenu from "./page/UpdateMenu";
 
 export default function App() {
   return (
@@ -10,6 +13,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/AdminLogin" element={<AdminPage />} />
         <Route path="/menuAdmin" element={<MenuAdmin />} />
+        <Route path="/inventory" element={<Inventory />} />
+        <Route path="/tambah-menu" element={<AddMenu />} />
+        <Route path="/update-post/:postId" element={<UpdateMenu />} />
       </Routes>
     </BrowserRouter>
   )
