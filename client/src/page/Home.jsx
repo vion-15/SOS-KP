@@ -1,4 +1,4 @@
-import { MdRestaurantMenu } from "react-icons/md";
+import { MdRestaurantMenu, MdShowChart } from "react-icons/md";
 import { RiDrinksFill } from "react-icons/ri";
 import { PiBowlFoodFill } from "react-icons/pi";
 import { LuDessert } from "react-icons/lu";
@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import ProductGrid from "../components/CardProduk";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import CartModal from "../components/cardModal";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
@@ -16,6 +17,7 @@ export default function Home() {
     const [makananCount, setMakananCount] = useState(0);
     const [minumanCount, setMinumanCount] = useState(0);
     const [dessertCount, setDessertCount] = useState(0);
+    const [showCart, setShowCart] = useState(false);
     const location = useLocation();
     const currentLocation = location.pathname;
 
@@ -102,9 +104,12 @@ export default function Home() {
 
 
                 <Button className="fixed bottom-4 left-4 rounded-full p-3 z-50"
-                    color="failure">
+                    color="failure"
+                    onClick={() => setShowCart(true)}>
                     <FaShoppingBag />
                 </Button>
+
+                <CartModal openModal={showCart} setOpenModal={setShowCart} />
 
                 <Button className="fixed bottom-4 right-4 rounded-full p-3 z-50"
                     color="failure">
