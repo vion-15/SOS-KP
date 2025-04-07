@@ -6,6 +6,7 @@ import { Button } from "flowbite-react";
 import { FaShoppingBag } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa";
 import Header from "../components/Header";
+import ProductGrid from "../components/CardProduk";
 
 export default function Home() {
     return (
@@ -48,6 +49,8 @@ export default function Home() {
                 color="failure">
                 <FaArrowUp />
             </Button>
+
+            <ProductGrid />
         </div>
         </>
     )

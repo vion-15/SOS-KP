@@ -86,43 +86,37 @@ export default function AddMenu() {
             gap-4" onSubmit={handleSubmit}>
                 <div className="flex flex-col
                 gap-4 sm:flex-row justify-between">
+                    <Label htmlFor="nama" value="Nama Makanan :" />
                     <TextInput type='text' placeholder='Nama makanan'
                         required id='nama' className='flex-1'
                         onChange={(e) => setFormData({ ...formData, judul: e.target.value })} />
+                    
+                    <Label htmlFor="kategori" value="Kategori :" />
                     <Select required onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
                         <option value="uncategorized">Pilih Kategori</option>
-                        <option value="Minuman">Drink</option>
-                        <option value="Makanan">Food</option>
+                        <option value="Makanan">Makanan</option>
+                        <option value="Minuman">Minuman</option>
                         <option value="Dessert">Dessert</option>
                     </Select>
                 </div>
+                <Label htmlFor="harga" value="Harga :" />
                 <TextInput type='number' placeholder='Harga'
                     required id='harga' className='flex-1'
                     onChange={(e) => setFormData({ ...formData, harga: e.target.value })} />
+                
+                <Label htmlFor="stock" value="Stock :" />
                 <TextInput type='number' placeholder='Stock'
                     required id='stock' className='flex-1'
                     onChange={(e) => setFormData({ ...formData, stock: e.target.value })} />
-                <div className="flex flex-col sm:flex-row gap-4 items-center">
-                    <Checkbox
-                        id="promo"
-                        onChange={(e) =>
-                            setFormData({ ...formData, promo: e.target.checked })
-                        }
+                <Label htmlFor="promo" value="Promo/Diskon :" />
+                <div className="flex flex-row sm:flex-row gap-4 items-center">
+                    <TextInput
+                        type="number"
+                        max="100"
+                        placeholder="Diskon (%)"
+                        className="flex-1"
+                        onChange={(e) => setFormData({ ...formData, promo: e.target.value})}
                     />
-                    <Label htmlFor="promo" value="Aktifkan Promo" />
-
-                    {formData.promo && (
-                        <TextInput
-                            type="number"
-                            min="1"
-                            max="100"
-                            placeholder="Diskon (%)"
-                            className="flex-1"
-                            onChange={(e) =>
-                                setFormData({ ...formData, discount: Number(e.target.value) })
-                            }
-                        />
-                    )}
                 </div>
                 <div className='flex gap-4 items-center 
                 justify-between border-4 border-gray-500

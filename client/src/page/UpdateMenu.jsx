@@ -11,7 +11,9 @@ export default function UpdateMenu() {
     const [file, setFile] = useState(null);
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({
+        promo: '',
+    });
     const [publishError, setPublishError] = useState(null);
     const navigate = useNavigate();
     const { postId } = useParams();
@@ -77,13 +79,17 @@ export default function UpdateMenu() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const submitData = {
+            ...formData,
+            promo: Number(formData.promo || 0), // kalau kosong ('') dianggap 0
+        };
         try {
             const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(submitData),
             });
             const data = await res.json();
             if (!res.ok) {
@@ -92,68 +98,58 @@ export default function UpdateMenu() {
             }
             if (res.ok) {
                 setPublishError(null);
-                navigate('/dashboard?tab=menu');
+                navigate('/inventory');
             }
         } catch (error) {
             setPublishError("Ada yang tidak benar");
             console.log(error);
         }
     };
+
     return (
         <div className="p-3 max-w-3xl
-    mx-auto min-h-screen">
+        mx-auto min-h-screen">
             <h1 className="text-center
-        text-3xl my-7 font-semibold">
+            text-3xl my-7 font-semibold">
                 Update Menu
             </h1>
             <form className="flex flex-col
             gap-4" onSubmit={handleSubmit}>
                 <div className="flex flex-col
-            gap-4 sm:flex-row justify-between">
+                gap-4 sm:flex-row justify-between">
+                    <Label htmlFor="nama" value="Nama Makanan :" />
                     <TextInput type='text' placeholder='Nama makanan'
                         required id='nama' className='flex-1'
                         onChange={(e) => setFormData({ ...formData, judul: e.target.value })} value={formData.judul} />
+
+                    <Label htmlFor="kategori" value="Kategori :" />
                     <Select required onChange={(e) => setFormData({ ...formData, category: e.target.value })} value={formData.category}>
                         <option value="uncategorized">Pilih Kategori</option>
-                        <option value="Makanan Lokal">Makanan Lokal</option>
-                        <option value="Makanan Jepang">Makanan Jepang</option>
-                        <option value="Makanan Eropa">Makanan Eropa</option>
+                        <option value="Makanan">Makanan</option>
+                        <option value="Minuman">Minuman</option>
+                        <option value="Dessert">Dessert</option>
                     </Select>
                 </div>
+
+                <Label htmlFor="harga" value="Harga :" />
                 <TextInput type='number' placeholder='Harga'
                     required id='harga' className='flex-1'
                     onChange={(e) => setFormData({ ...formData, harga: e.target.value })} value={formData.harga} />
+
+                <Label htmlFor="stock" value="Stock :" />
                 <TextInput type='number' placeholder='Stock'
                     required id='stock' className='flex-1'
                     onChange={(e) => setFormData({ ...formData, stock: e.target.value })} value={formData.stock} />
-                <div className="flex flex-col sm:flex-row gap-4 items-center">
-                    <Checkbox
-                        id="promo"
-                        checked={formData.promo > 0}
-                        onChange={(e) => {
-                            setFormData({
-                                ...formData,
-                                promo: e.target.checked ? 0 : 0, // saat dicentang -> nilai awal 1
-                            });
-                        }}
-                    />
-                    <Label htmlFor="promo" value="Aktifkan Promo" />
 
+                <Label htmlFor="promo" value="Promo/Diskon :" />
+                <div className="flex flex-row sm:flex-row gap-4 items-center">
                     <TextInput
                         type="number"
-                        min="1"
                         max="100"
                         placeholder="Diskon (%)"
                         className="flex-1"
-                        onChange={(e) => {
-                            const val = Number(e.target.value);
-                            setFormData({
-                                ...formData,
-                                promo: val,
-                            });
-                        }}
+                        onChange={(e) => setFormData({ ...formData, promo: e.target.value})}
                         value={formData.promo}
-                        disabled={formData.promo === 0} // hanya aktif kalau promo > 0
                     />
                 </div>
 

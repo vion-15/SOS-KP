@@ -21,7 +21,6 @@ const postSchema = new mongoose.Schema(
         },
         promo: {
             type: Number,
-            default: 0,
         },
         image: {
             type: String,
