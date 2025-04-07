@@ -6,11 +6,11 @@ import { Button } from "flowbite-react";
 import { FaShoppingBag } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa";
 import Header from "../components/Header";
-import ProductGrid from "../components/CardProduk";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import CardMinuman from "./CardMinuman";
 
-export default function Home() {
+export default function MinumanPage() {
     const [products, setProducts] = useState([]);
     const [productCount, setProductCount] = useState(0);
     const [makananCount, setMakananCount] = useState(0);
@@ -111,7 +111,7 @@ export default function Home() {
                     <FaArrowUp />
                 </Button>
 
-                <ProductGrid />
+                <CardMinuman />
             </div>
         </>
     )

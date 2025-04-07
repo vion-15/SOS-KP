@@ -1,7 +1,7 @@
 import { Navbar } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { FaPowerOff } from "react-icons/fa";
-import SearchOverlay from './SearchButton';
+import SearchOverlay from './SearchOverlay';
 
 export default function Header() {
     return (

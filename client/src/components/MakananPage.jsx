@@ -6,11 +6,11 @@ import { Button } from "flowbite-react";
 import { FaShoppingBag } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa";
 import Header from "../components/Header";
-import ProductGrid from "../components/CardProduk";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import CardMakanan from "./CardMakanan";
 
-export default function Home() {
+export default function MakananPage() {
     const [products, setProducts] = useState([]);
     const [productCount, setProductCount] = useState(0);
     const [makananCount, setMakananCount] = useState(0);
@@ -88,11 +88,11 @@ export default function Home() {
                     
                     <Link to="/dessert">
                     <div className={`flex flex-col items-center gap-2 p-3 border rounded-xl justify-center min-w-[150px] cursor-pointer 
-                        ${isActive("/makanan") ? "bg-red-500 text-white" : "bg-white text-black"}`}>
+                        ${isActive("/dessert") ? "bg-red-500 text-white" : "bg-white text-black"}`}>
                         <LuDessert size="30"/>
                         <p>Dessert</p>
                         <div className={`flex flex-row text-gray-600 gap-1
-                            ${isActive("/makanan") ? "text-white" : "text-black"}`}>
+                            ${isActive("/dessert") ? "text-white" : "text-black"}`}>
                             {dessertCount}
                             <p>items</p>
                         </div>
@@ -111,7 +111,7 @@ export default function Home() {
                     <FaArrowUp />
                 </Button>
 
-                <ProductGrid />
+                <CardMakanan />
             </div>
         </>
     )
