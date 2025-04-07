@@ -99,3 +99,23 @@ export const updatepost = async (req, res, next) => {
         next(error);
     }
 };
+
+export const update = async (req, res, next) => {
+    try {
+        const updatePost = await Post.findByIdAndUpdate(req.params.postId, 
+            {
+                $set: {
+                    judul: req.body.judul,
+                    content: req.body.content,
+                    image: req.body.image,
+                    category: req.body.category,
+                    harga: req.body.harga,
+                    stock: req.body.stock,
+                }
+            }, { new:true }
+        );
+        res.status(200).json(updatePost);
+    } catch (error) {
+        next(error);
+    }
+};

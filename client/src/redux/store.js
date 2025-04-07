@@ -3,9 +3,11 @@ import userReducer from './user/userSlice';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import postReducer from "./post/postSlice";
+import cartReducer from "./keranjang/keranjangSlice";
 
 const rootReducer = combineReducers({
     user: userReducer,
+    cart: cartReducer,
     posts: postReducer,
 });
 

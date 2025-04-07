@@ -27,3 +27,12 @@ export const getCartItems = async (req, res) => {
         res.status(500).json({ message: "Terjadi kesalahan saat mengambil data keranjang." });
     }
 };
+
+export const deleteposts = async (req, res, next) => {
+    try {
+        await Keranjang.findByIdAndDelete(req.params.postId);
+        res.status(200).json('Post sudah di delete');
+    } catch (error) {
+        next(error);
+    };
+};

@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
+import { addItemToCart } from "../redux/keranjang/keranjangSlice";
+import { useDispatch } from 'react-redux';
 
 const ProductGrid = () => {
     const [products, setProducts] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const getMenu = async () => {
@@ -26,15 +29,14 @@ const ProductGrid = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    judul: product.judul,
-                    harga: product.harga,
-                    stock: product.stock,
-                    promo: product.promo,
-            }),
+                    ...product,
+                    quantity: 1,
+                }),
         });
 
         const data = await res.json();
         if(res.ok){
+            dispatch(addItemToCart(product));
             console.log("Berhasil ditambah", data);
         }else{
             console.log("Gagal ditambah", data.message);
