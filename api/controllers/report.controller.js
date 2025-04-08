@@ -3,7 +3,11 @@ import { errorHandler } from "../utils/error.js";
 
 export const laporan = async (req, res, next) => {
     try {
-        const { items, totalHarga } = req.body;
+        const { items, totalHarga, username, meja } = req.body;
+
+        if(!username || !meja){
+            return res.status(400).json({ message: 'Harus isi username dan meja' });
+        }
 
         if (!items || items.length === 0) {
             return res.status(400).json({ message: 'Items tidak boleh kosong' });
@@ -30,7 +34,7 @@ export const laporan = async (req, res, next) => {
             
         } else {
             // Jika tidak ada dokumen, buat dokumen baru
-            laporan = new Report({ items, totalHarga });
+            laporan = new Report({ username, meja, items, totalHarga });
             await laporan.save();
         }
 

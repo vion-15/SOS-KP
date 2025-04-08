@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 const reportSchema = new mongoose.Schema(
     {
+        username: { type: String, required: true},
+        meja: { type: Number, required: true},
         items: [
             {
                 judul: { type: String, required: true },

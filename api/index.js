@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 import postRoute from './routes/post.route.js';
 import cartRoute from './routes/cart.route.js';
 import reportRoute from './routes/report.route.js';
+import paymentRoutes from './routes/payment.route.js';
+
 
 dotenv.config();
 
@@ -32,7 +34,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoute);
 app.use('/api/cart', cartRoute);
 app.use('/api/report', reportRoute);
-
+app.use('/api/payment', paymentRoutes);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

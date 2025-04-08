@@ -1,9 +1,10 @@
-import { Button, Modal } from "flowbite-react";
+import { Button, Label, Modal, Select } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiShoppingBag } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItemFromCart, selectCartCount, setCartItems } from "../redux/keranjang/keranjangSlice";
 import { useNavigate } from "react-router-dom";
+import { TextInput } from "flowbite-react";
 
 export default function Keranjang() {
     const [showModal, setShowModal] = useState(false);
@@ -12,7 +13,9 @@ export default function Keranjang() {
     const navigate = useNavigate();
     console.log(cartItems);
     const cartCount = useSelector(selectCartCount);
-    
+    const [username, setUsername] = useState('');
+    const [meja, setMeja] = useState('');
+
     const handleList = () => {
         setShowModal(true);
     };
@@ -22,7 +25,7 @@ export default function Keranjang() {
             try {
                 const res = await fetch('/api/cart/getItems');
                 const data = await res.json();
-                if(res.ok){
+                if (res.ok) {
                     dispatch(setCartItems(data));
                     console.log(data);
                 }
@@ -95,9 +98,6 @@ export default function Keranjang() {
     };
 
     const handleUpdate = async (itemId, stock, quantity) => {
-        console.log(itemId);
-        console.log(stock);
-        console.log(quantity);
         try {
             const res = await fetch(`/api/post/update/${itemId}`, {
                 method: "PATCH",
@@ -120,8 +120,13 @@ export default function Keranjang() {
         }
     };
 
-    const handlePost = async (quantity) => {
+    const handlePost = async () => {
         // Mengambil semua item dari keranjang
+        if (!username.trim() || !meja || meja === 'uncategorized') {
+            alert('Mohon isi nama dan pilih nomor meja terlebih dahulu.');
+            return;
+        }
+
         const itemsToPost = cartItems.map((item) => ({
             id: item._id,
             judul: item.judul,
@@ -130,10 +135,6 @@ export default function Keranjang() {
             harga: item.harga,
             totalHargaItem: getTotalHarga(item.harga, item.quantity), // Total harga untuk item ini
         }));
-
-        console.log(itemsToPost);
-
-        console.log(cartItems);
 
         // Menghitung total harga keseluruhan
         const totalHarga = getTotalKeranjang();
@@ -145,9 +146,10 @@ export default function Keranjang() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    username,
+                    meja,
                     items: itemsToPost, // Semua item dalam satu array
                     totalHarga: totalHarga,
-                    quantity: quantity, // Total harga keseluruhan
                 }),
             });
 
@@ -157,6 +159,8 @@ export default function Keranjang() {
             }
             if (res.ok) {
                 console.log("Sukses mengirim data:", data);
+                setUsername('');
+                setMeja('');
             }
         } catch (error) {
             console.log(error);
@@ -179,10 +183,25 @@ export default function Keranjang() {
             <Modal show={showModal} onClose={() => setShowModal(false)}>
                 <Modal.Header>Keranjang Belanja</Modal.Header>
                 <Modal.Body>
+                    <form>
+                        <Label htmlFor="konsumen" value="Nama Anda :" />
+                        <TextInput required type="text" placeholder="Masukan Nama Anda"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}></TextInput>
+                        <Label htmlFor="meja" value="Pilih Meja :" />
+                        <Select required value={meja} onChange={(e) => setMeja(e.target.value)}>
+                            <option value="uncategorized">Pilih Nomer Meja</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </Select>
+                    </form>
                     {cartItems.length > 0 ? (
                         <>
-                            {cartItems.map((post, index) => (
-                                <div key={index} className="flex items-center gap-4 p-3 border-b">
+                            {cartItems.map((post) => (
+                                <div key={post._id} className="flex items-center gap-4 p-3 border-b">
                                     <img
                                         src={post.image}
                                         alt="gambar"
@@ -226,20 +245,48 @@ export default function Keranjang() {
                                 <Button
                                     onClick={async () => {
                                         try {
-                                            for (const item of cartItems) {
-                                                // Update item
-                                                await handleUpdate(item._id, item.stock, item.quantity);
+                                            const res = await fetch('/api/payment/transaction', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                                body: JSON.stringify({
+                                                    username,
+                                                    meja,
+                                                    items: cartItems.map((item) => ({
+                                                        id: item._id,
+                                                        judul: item.judul,
+                                                        quantity: item.quantity,
+                                                        harga: item.harga,
+                                                    })),
+                                                    totalHarga: getTotalKeranjang(),
+                                                }),
+                                            });
 
-                                                // Kirim data ke server
-                                                await handlePost(item.quantity);
+                                            const data = await res.json();
+                                            if (!res.ok) return alert("Gagal membuat transaksi");
 
-                                                // Hapus item setelah proses selesai
-                                                await handleDelete(item._id);
-                                            }
+                                            window.snap.pay(data.token, {
+                                                onSuccess: async function () {
+                                                    await handlePost(); // kirim data ke laporan
+                                                    for (const item of cartItems) {
+                                                        await handleUpdate(item._id, item.stock, item.quantity);
+                                                        await handleDelete(item._id);
+                                                    }
+                                                    navigate('/');
+                                                    alert("Pembayaran Berhasil & Pesanan Diterima");
+                                                },
+                                                onPending: function () {
+                                                    alert("Menunggu pembayaran");
+                                                },
+                                                onError: function () {
+                                                    alert("Pembayaran gagal");
+                                                },
+                                                onClose: function () {
+                                                    alert("Kamu menutup popup tanpa menyelesaikan pembayaran");
+                                                }
+                                            });
 
-                                            // Pindahkan navigasi dan alert di luar loop
-                                            navigate('/');
-                                            alert("Pesanan Diterima");
                                         } catch (error) {
                                             console.error("Terjadi kesalahan:", error);
                                         }
@@ -247,6 +294,7 @@ export default function Keranjang() {
                                 >
                                     Bayar
                                 </Button>
+
 
                             </div>
                         </>
