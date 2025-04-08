@@ -3,10 +3,10 @@ import { errorHandler } from "../utils/error.js";
 
 export const laporan = async (req, res, next) => {
     try {
-        const { items, totalHarga, username, meja } = req.body;
+        const { items, totalHarga, username, meja, email } = req.body;
 
-        if(!username || !meja){
-            return res.status(400).json({ message: 'Harus isi username dan meja' });
+        if(!username || !meja || !email){
+            return res.status(400).json({ message: 'Harus isi username meja, dan email' });
         }
 
         if (!items || items.length === 0) {
@@ -34,7 +34,7 @@ export const laporan = async (req, res, next) => {
             
         } else {
             // Jika tidak ada dokumen, buat dokumen baru
-            laporan = new Report({ username, meja, items, totalHarga });
+            laporan = new Report({ username, meja, email, items, totalHarga });
             await laporan.save();
         }
 

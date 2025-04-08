@@ -15,6 +15,7 @@ export default function Keranjang() {
     const cartCount = useSelector(selectCartCount);
     const [username, setUsername] = useState('');
     const [meja, setMeja] = useState('');
+    const [email, setEmail] = useState('');
 
     const handleList = () => {
         setShowModal(true);
@@ -136,6 +137,8 @@ export default function Keranjang() {
             totalHargaItem: getTotalHarga(item.harga, item.quantity), // Total harga untuk item ini
         }));
 
+        console.log(cartItems.items);
+
         // Menghitung total harga keseluruhan
         const totalHarga = getTotalKeranjang();
 
@@ -148,6 +151,7 @@ export default function Keranjang() {
                 body: JSON.stringify({
                     username,
                     meja,
+                    email,
                     items: itemsToPost, // Semua item dalam satu array
                     totalHarga: totalHarga,
                 }),
@@ -197,6 +201,9 @@ export default function Keranjang() {
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </Select>
+                        <Label htmlFor="email" value="E-mail (untuk bukti transaksi)" />
+                        <TextInput required type="text" placeholder="E-mail" value={email} 
+                        onChange={(e) => setEmail(e.target.value)}></TextInput>
                     </form>
                     {cartItems.length > 0 ? (
                         <>
@@ -210,7 +217,7 @@ export default function Keranjang() {
                                     <div className="flex-1">
                                         <p className="text-sm font-semibold text-gray-800">{post.judul}</p>
                                         <p className="text-sm text-gray-500">Stok : {post.stock}</p>
-                                        <p className="text-sm text-gray-500">Rp {post.harga}</p>
+                                        <p className="text-sm text-gray-500">Rp {post.promo != 0 ? post.promo : post.harga}</p>
                                         <div className="flex items-center gap-2 mt-2">
                                             <Button
                                                 onClick={() => handleDecrease(post._id)}
