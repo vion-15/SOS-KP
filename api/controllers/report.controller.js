@@ -64,3 +64,36 @@ export const markReportAsDone = async (req, res, next) => {
         next(err);
     }
 };
+
+export const allReport = async (req, res, next) => {
+    try {
+        const reports = await Report.find({}).sort({ createdAt: -1 });
+
+        const totalPenjualan = reports.reduce((acc, curr) => acc + curr.totalHarga, 0);
+        const totalProfit = reports.reduce((acc, curr) => acc + (curr.totalHarga * 0.3), 0); // contoh 30% profit
+        const totalCustomer = reports.length;
+
+        // Hitung menu favorit
+        const menuCount = {};
+        reports.forEach(report => {
+            report.items?.forEach(item => {
+                if (item.judul) {
+                    menuCount[item.judul] = (menuCount[item.judul] || 0) + item.quantity;
+                }
+            });
+        });
+
+        const menuFavorit = Object.entries(menuCount).sort((a, b) => b[1] - a[1])[0]?.[0] || 'Belum ada';
+
+        res.status(200).json({
+            totalPenjualan,
+            totalProfit,
+            totalCustomer,
+            menuFavorit,
+            transaksi: reports,
+        });
+    } catch (error) {
+        next(errorHandler(500, 'Gagal mengambil ringkasan laporan'));
+    }
+};
+

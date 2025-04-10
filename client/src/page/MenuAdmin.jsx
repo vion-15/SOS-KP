@@ -235,10 +235,12 @@ export default function MenuAdmin() {
                         <p>Activity</p>
                     </Button>
                     </Link>
+                    <Link to='/report'>
                     <Button className="flex items-center justify-center gap-2 w-full">
                         <TbReportAnalytics className="text-xl mr-2" />
                         <p>Report</p>
                     </Button>
+                    </Link>
 
                     <Button
                         className="flex items-center justify-center gap-2 w-full"
