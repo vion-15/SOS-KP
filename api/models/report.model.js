@@ -17,6 +17,7 @@ const reportSchema = new mongoose.Schema(
         totalHarga: { type: Number, required: true },
         order_id: {type: String},
         status_payment: {type: String},
+        isDone: {type: Boolean, default: false},
     }, {timestamps: true}
 );
 

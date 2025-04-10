@@ -3,7 +3,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useEffect, useState } from "react";
 import ProductGridSearch from "./ProductGridSearch";
 
-export default function SearchActivity() {
+export default function SearchActivity({tab}) {
     const [searchQuery, setSearchQuery] = useState("");
     const [showSearch, setShowSearch] = useState(false);
     const [allProducts, setAllProducts] = useState([]);
@@ -42,7 +42,7 @@ export default function SearchActivity() {
 
     return (
         <>
-            <Modal show={showSearch} onClose={() => setShowSearch(false)} size="xl">
+            <Modal show={showSearch} onClose={() => {setShowSearch(false); setSearchQuery("");}} size="xl">
                 <Modal.Header>
                     Pencarian Menu
                 </Modal.Header>
@@ -59,6 +59,7 @@ export default function SearchActivity() {
                     <ProductGridSearch
                         products={filteredProducts}
                         onAddToCart={handleAddToCart}
+                        tab={tab}
                     />
                 </Modal.Body>
             </Modal>

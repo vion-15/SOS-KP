@@ -8,6 +8,7 @@ const ProductGridSearch = ({ products, onAddToCart }) => {
     return (
         <div className="space-y-4">
             {products.map((product) => {
+                const isFinishedTab = product.isDone === true;
 
                 return (
                     <div
@@ -38,7 +39,11 @@ const ProductGridSearch = ({ products, onAddToCart }) => {
 
                         <button
                             onClick={() => onAddToCart(product)}
-                            className="mt-2 bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm"
+                            disable={isFinishedTab}
+                            className={`mt-2 px-3 py-1 rounded-lg text-sm
+                                ${isFinishedTab ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-green-500 hover:bg-green-600 text-white'
+                                }`}
                         >
                             Done
                         </button>

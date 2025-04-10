@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import SearchActivity from '../components/SearchActivity';
+import { Button } from 'flowbite-react';
+import { Link } from 'react-router-dom';
 
 export default function Activity() {
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [tab, setTab] = useState('unfinished');
 
     useEffect(() => {
         const fetchReports = async () => {
@@ -24,23 +27,56 @@ export default function Activity() {
         fetchReports();
     }, []);
 
-    const handleDone = (id) => {
-        // aksi jika order selesai (bisa diisi nanti)
-        console.log(`Order ${id} selesai`);
+    const handleDone = async (id) => {
+        try {
+            const res = await fetch(`/api/report/done/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ isDone: true }),
+            });
+            if (!res.ok) {
+                throw new Error('Gagal menyelesaikan order');
+            }
+            setReports(prev => prev.map(r => (r._id === id ? { ...r, isDone: true } : r)));
+        } catch (err) {
+            console.log(err.message);
+        }
     };
+
+    const filteredReports = reports.filter(report => tab === 'unfinished' ? !report.isDone : report.isDone);
 
     if (loading) return <p className="p-4">Loading...</p>;
 
     return (
         <div className="p-6 space-y-4">
-            <h2 className="text-2xl font-bold">Activity</h2>
+            <div className='flex flex-row justify-between'>
+                <h2 className="text-2xl font-bold">Activity</h2>
+                <Link to='/menuAdmin'>
+                    <p className='text-lg'>Back</p>
+                </Link>
+            </div>
 
-            <SearchActivity />
+            <div className='flex gap-4 mb-4'>
+                <Button
+                    onClick={() => setTab('unfinished')}
+                    className={`px-4 py-2 rounded ${tab === 'unfinished' ? 'bg-green-500 text-white' : 'bg-gray-200'}`}>
+                    Belum Selesai
+                </Button>
+                <Button
+                    onClick={() => setTab('finished')}
+                    className={`px-4 py-2 rounded ${tab === 'finished' ? 'bg-green-500 text-white' : 'bg-gray-200'}`}>
+                    Selesai
+                </Button>
+            </div>
 
-            {reports.length === 0 ? (
+            <SearchActivity tab={tab} />
+
+            {filteredReports.length === 0 ? (
                 <p>Tidak ada laporan.</p>
             ) : (
-                reports.map((report) => (
+                filteredReports.map((report) => (
                     <div key={report._id} className="border rounded-lg p-4 shadow bg-white">
                         <div className="mb-2 flex justify-between items-center">
                             <h3 className="font-semibold text-lg">Order ID: {report.order_id}</h3>
@@ -66,7 +102,9 @@ export default function Activity() {
                         {report.status_payment && (
                             <button
                                 onClick={() => handleDone(report._id)}
-                                className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                disabled={tab === 'finished'}
+                                className={`
+                                    ${tab === 'unfinished' ? 'mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600' : 'text-green-500 mt-4 font-bold text-2xl'}`}
                             >
                                 Done
                             </button>

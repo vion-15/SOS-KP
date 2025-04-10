@@ -50,3 +50,17 @@ export const getAllReports = async (req, res, next) => {
         next(errorHandler(500, 'Gagal mengambil laporan'));
     }
 };
+
+export const markReportAsDone = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const updated = await Report.findByIdAndUpdate(
+            id,
+            { isDone: true },
+            { new: true }
+        );
+        res.status(200).json(updated);
+    } catch (err) {
+        next(err);
+    }
+};
