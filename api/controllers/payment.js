@@ -11,9 +11,11 @@ export const createTransaction = async (req, res) => {
         
         const { username, meja, totalHarga, items } = req.body;
 
+        const orderId = `ORDER-${Math.floor(Math.random() * 1000000)}`;
+
         const parameter = {
             transaction_details: {
-                order_id: `ORDER-${Math.floor(Math.random() * 1000000)}`,
+                order_id: orderId,
                 gross_amount: totalHarga,
             },
             customer_details: {
@@ -31,7 +33,7 @@ export const createTransaction = async (req, res) => {
         const transaction = await snap.createTransaction(parameter);
         const snapToken = transaction.token;
         console.log(transaction.token);
-        res.status(200).json({ token: snapToken });
+        res.status(200).json({ token: snapToken, order_id: orderId });
 
     } catch (error) {
         console.error("Gagal membuat transaksi:", error); // ini untuk log detail di terminal

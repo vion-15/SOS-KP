@@ -122,7 +122,7 @@ export default function Keranjang() {
         }
     };
 
-    const handlePost = async () => {
+    const handlePost = async (result) => {
         // Mengambil semua item dari keranjang
         if (!username.trim() || !meja || meja === 'uncategorized') {
             alert('Mohon isi nama dan pilih nomor meja terlebih dahulu.');
@@ -155,6 +155,8 @@ export default function Keranjang() {
                     email,
                     items: itemsToPost, // Semua item dalam satu array
                     totalHarga: totalHarga,
+                    order_id: result.order_id,
+                    status: result.transaction_status,
                 }),
             });
 
@@ -166,6 +168,7 @@ export default function Keranjang() {
                 console.log("Sukses mengirim data:", data);
                 setUsername('');
                 setMeja('');
+                setEmail('');
             }
         } catch (error) {
             console.log(error);
@@ -203,7 +206,7 @@ export default function Keranjang() {
                             <option value="5">5</option>
                         </Select>
                         <Label htmlFor="email" value="E-mail (untuk bukti transaksi)" />
-                        <TextInput required type="text" placeholder="E-mail" value={email} 
+                        <TextInput required type="email" placeholder="E-mail" value={email} 
                         onChange={(e) => setEmail(e.target.value)}></TextInput>
                     </form>
                     {cartItems.length > 0 ? (
@@ -275,8 +278,8 @@ export default function Keranjang() {
                                             if (!res.ok) return alert("Gagal membuat transaksi");
 
                                             window.snap.pay(data.token, {
-                                                onSuccess: async function () {
-                                                    await handlePost(); // kirim data ke laporan
+                                                onSuccess: async function (result) {
+                                                    await handlePost(result); // kirim data ke laporan
                                                     for (const item of cartItems) {
                                                         await handleUpdate(item._id, item.stock, item.quantity);
                                                         await handleDelete(item._id);
@@ -307,7 +310,7 @@ export default function Keranjang() {
                             </div>
                         </>
                     ) : (
-                        <p>Keranjang kosong</p>
+                        <p className="mt-10 text-2xl text-center text-gray-500">Keranjang kosong</p>
                     )}
                 </Modal.Body>
             </Modal>

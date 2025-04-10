@@ -3,10 +3,12 @@ import { errorHandler } from "../utils/error.js";
 
 export const laporan = async (req, res, next) => {
     try {
-        const { items, totalHarga, username, meja, email } = req.body;
+        const { items, totalHarga, username, meja, email, order_id, status } = req.body;
 
-        if(!username || !meja || !email){
-            return res.status(400).json({ message: 'Harus isi username meja, dan email' });
+        const status_payment = status === 'settlement' || status === 'capture' ? true : false;
+
+        if (!username || !meja || !email) {
+            return res.status(400).json({ message: 'Harus isi username, meja, dan email' });
         }
 
         if (!items || items.length === 0) {
@@ -17,24 +19,20 @@ export const laporan = async (req, res, next) => {
             return res.status(400).json({ message: 'Total harga diperlukan' });
         }
 
-        // Cari dokumen yang cocok berdasarkan totalHarga (atau kriteria lain jika ada)
-        let laporan = await Report.findOne({ totalHarga });
+        // Gunakan order_id untuk pencarian (jika unik)
+        let laporan = await Report.findOne({ order_id });
 
         if (laporan) {
+            const existingItemJudul = laporan.items.map(item => item.judul);
+            const newItems = items.filter(item => !existingItemJudul.includes(item.judul));
 
-            const existingItemIds = laporan.items.map(item => item._id);
-            const newItems = items.filter(item => !existingItemIds.includes(item._id));
-            
             if (newItems.length > 0) {
                 laporan.items.push(...newItems);
                 laporan.totalHarga += totalHarga;
                 laporan = await laporan.save();
             }
-
-            
         } else {
-            // Jika tidak ada dokumen, buat dokumen baru
-            laporan = new Report({ username, meja, email, items, totalHarga });
+            laporan = new Report({ username, meja, email, items, totalHarga, order_id, status_payment });
             await laporan.save();
         }
 
