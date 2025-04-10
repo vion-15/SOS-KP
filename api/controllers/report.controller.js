@@ -41,3 +41,12 @@ export const laporan = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getAllReports = async (req, res, next) => {
+    try {
+        const reports = await Report.find().sort({ createdAt: -1 }); // sort biar yang terbaru di atas
+        res.status(200).json(reports);
+    } catch (error) {
+        next(errorHandler(500, 'Gagal mengambil laporan'));
+    }
+};

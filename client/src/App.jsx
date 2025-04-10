@@ -8,6 +8,7 @@ import UpdateMenu from "./page/UpdateMenu";
 import MinumanPage from "./components/MinumanPage";
 import MakananPage from "./components/MakananPage";
 import DessertPage from "./components/DessertPage";
+import Activity from "./page/ActivityPage";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/minuman" element={<MinumanPage />} />
         <Route path="/makanan" element={<MakananPage />} />
         <Route path="/dessert" element={<DessertPage />} />
+        <Route path="/activity" element={<Activity />} />
       </Routes>
     </BrowserRouter>
   )
