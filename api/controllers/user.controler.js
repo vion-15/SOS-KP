@@ -46,3 +46,11 @@ export const updateUser = async (req, res, next) => {
             next(error);
         }
 };
+
+export const signOut = async (req, res, next) => {
+    try {
+        res.clearCookie('akses_token').status(200).json('Admin telah logout');
+    } catch (error) {
+        next(error);
+    }
+};

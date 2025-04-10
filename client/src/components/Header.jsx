@@ -2,8 +2,11 @@ import { Navbar } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { FaPowerOff } from "react-icons/fa";
 import SearchOverlay from './SearchOverlay';
+import { useSelector } from 'react-redux';
 
 export default function Header() {
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const isAdminLogin = currentUser?.isAdmin === true;
     return (
         <header className='sticky top-0 z-50'>
             <Navbar className='border-b-2 flex 
@@ -23,12 +26,13 @@ export default function Header() {
                         </div>
                         </Link>
 
-                        <Link to="/AdminLogin">
-                        <div className='flex flex-row items-center
-                        gap-2 bg-white px-5 py-2 rounded-full'>
-                            <h2 className='text-green-500'>Open</h2>
+                        <Link to={isAdminLogin ? '/menuAdmin' : '/AdminLogin'}>
+                        <div className={`flex flex-row items-center
+                        gap-2 bg-white px-5 py-2 rounded-full
+                        ${isAdminLogin ? 'text-green-500' :  'text-red-500'}`}>
+                            <h2>{isAdminLogin ? 'Open' : 'Closed'}</h2>
                             <FaPowerOff 
-                            color='green'/>
+                            color={isAdminLogin? 'green' : 'red'}/>
                         </div>
                         </Link>
                     </div>
