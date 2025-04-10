@@ -90,12 +90,13 @@ export default function Keranjang() {
 
     const getTotalKeranjang = () => {
         return cartItems.reduce((total, post) => {
-            return total + getTotalHarga(post.harga, post.quantity);
+            return total + getTotalHarga(post.harga, post.quantity, post.promo);
         }, 0);
     };
 
-    const getTotalHarga = (harga, quantity) => {
-        return harga * quantity;
+    const getTotalHarga = (harga, quantity, promo = 0) => {
+        const hargaFinal = promo !== 0 ? harga * (100 - promo) / 100 : harga;
+        return hargaFinal * quantity;
     };
 
     const handleUpdate = async (itemId, stock, quantity) => {
@@ -133,8 +134,8 @@ export default function Keranjang() {
             judul: item.judul,
             quantity: item.quantity,
             stock: item.stock,
-            harga: item.harga,
-            totalHargaItem: getTotalHarga(item.harga, item.quantity), // Total harga untuk item ini
+            harga: item.promo !== 0 ? item.harga * (100 - item.promo) / 100 : item.harga,
+            totalHargaItem: getTotalHarga(item.harga, item.quantity, item.promo), // Total harga untuk item ini
         }));
 
         console.log(cartItems.items);
@@ -217,7 +218,7 @@ export default function Keranjang() {
                                     <div className="flex-1">
                                         <p className="text-sm font-semibold text-gray-800">{post.judul}</p>
                                         <p className="text-sm text-gray-500">Stok : {post.stock}</p>
-                                        <p className="text-sm text-gray-500">Rp {post.promo != 0 ? post.promo : post.harga}</p>
+                                        <p className="text-sm text-gray-500">Rp {post.promo != 0 ? post.harga * (100 - post.promo) / 100 : post.harga}</p>
                                         <div className="flex items-center gap-2 mt-2">
                                             <Button
                                                 onClick={() => handleDecrease(post._id)}
@@ -242,7 +243,7 @@ export default function Keranjang() {
                                     </div>
                                     <div className="flex flex-col items-end">
                                         <p className="text-sm font-semibold">
-                                            Total: Rp {getTotalHarga(post.harga, post.quantity)}
+                                            Total: Rp {getTotalHarga(post.harga, post.quantity, post.promo)}
                                         </p>
                                     </div>
                                 </div>
@@ -264,7 +265,7 @@ export default function Keranjang() {
                                                         id: item._id,
                                                         judul: item.judul,
                                                         quantity: item.quantity,
-                                                        harga: item.harga,
+                                                        harga: item.promo !== 0 ? item.harga * (100 - item.promo) / 100 : item.harga,
                                                     })),
                                                     totalHarga: getTotalKeranjang(),
                                                 }),
