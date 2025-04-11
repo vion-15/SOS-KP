@@ -24,6 +24,10 @@ export default function ReportPage() {
         };
 
         fetchReportData();
+
+        const intervalId = setInterval(fetchReportData, 1000);
+
+        return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
@@ -43,6 +47,10 @@ export default function ReportPage() {
         };
 
         fetchCompareData();
+
+        const intervalId = setInterval(fetchCompareData, 1000);
+
+        return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
@@ -56,6 +64,10 @@ export default function ReportPage() {
             }
         };
         dayReport();
+
+        const intervalId = setInterval(dayReport, 1000);
+
+        return () => clearInterval(intervalId);
     }, []);
 
     const getDifference = (todayVal, yesterdayVal) => {
@@ -222,7 +234,7 @@ export default function ReportPage() {
             </div>
 
             <div className="mt-6">
-                <h2 className="text-xl font-semibold mb-2">Semua Transaksi Hari Ini</h2>
+                <h2 className="text-xl font-semibold mb-2">Semua Transaksi Hari Ini :</h2>
                 <table className="w-full text-sm border-collapse">
                     <thead>
                         <tr className="bg-gray-100">
@@ -255,7 +267,7 @@ export default function ReportPage() {
             </div>
 
             <div className="mt-6">
-                <h2 className="text-xl font-semibold mb-2">Semua Laporan</h2>
+                <h2 className="text-xl font-semibold mb-2">Semua Laporan :</h2>
                 <table className="w-full text-sm border-collapse">
                     <thead>
                         <tr className="bg-gray-100">
