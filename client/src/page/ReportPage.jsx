@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Modal } from 'flowbite-react';
 import { Link } from "react-router-dom";
+import html2pdf from 'html2pdf.js';
+import { useRef } from 'react';
 
 export default function ReportPage() {
     const [reportData, setReportData] = useState(null);
@@ -11,6 +13,7 @@ export default function ReportPage() {
     const [todayReport, setTodayReport] = useState(null);
     const [yesterdayReport, setYesterdayReport] = useState(null);
     const [showAllTransactions, setShowAllTransactions] = useState(false);
+    const reportRef = useRef();
 
     useEffect(() => {
         const fetchReportData = async () => {
@@ -135,6 +138,19 @@ export default function ReportPage() {
         }
     };
 
+    const handleDownloadPDF = () => {
+        const element = reportRef.current;
+        const opt = {
+            margin:       0.5,
+            filename:     `Laporan-${new Date().toLocaleDateString("id-ID")}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    };
+    
+
 
     return (
         <div className="p-6 space-y-6">
@@ -146,6 +162,7 @@ export default function ReportPage() {
             </div>
             <Button color="failure" onClick={async () => {
                 await handlePost();
+                await handleDownloadPDF();
                 await handleDelete();
             }}>
                 Download Report
@@ -164,6 +181,7 @@ export default function ReportPage() {
                 </Modal.Footer>
             </Modal>
 
+            <div ref={reportRef}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {/* Card data */}
                 <div className="p-4 bg-white shadow rounded-xl">
@@ -231,6 +249,7 @@ export default function ReportPage() {
                     <p className="text-xl font-bold">{reportData.menuFavorit}</p>
                     <p><span className="font-semibold">{reportData.totalFavoritQuantity}</span> pcs</p>
                 </div>
+            </div>
             </div>
 
             <div className="mt-6">
