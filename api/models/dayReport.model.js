@@ -18,6 +18,9 @@ const dayReport = new mongoose.Schema(
             type: String,
             default: '',
         },
+        jumlahQuantity: {
+            type: Number,
+        }
     }, {timestamps: true}
 );
 

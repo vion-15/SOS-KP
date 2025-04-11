@@ -3,13 +3,14 @@ import DayReport from '../models/dayReport.model.js';
 // SIMPAN DATA LAPORAN HARI INI
 export const saveDayReport = async (req, res) => {
     try {
-        const { totalPenjualan, totalProfit, jumlahPelanggan, menuFavorit } = req.body;
+        const { totalPenjualan, totalProfit, jumlahPelanggan, menuFavorit, jumlahQuantity } = req.body;
 
         const newReport = new DayReport({
             totalPenjualan,
             totalProfit,
             jumlahPelanggan,
             menuFavorit,
+            jumlahQuantity,
         });
 
         await newReport.save();
@@ -35,7 +36,12 @@ export const getTodayReport = async (req, res) => {
             }
         });
 
-        if (!report) return res.status(404).json({ message: "Belum ada laporan hari ini" });
+        if (!report) return res.status(200).json({
+            totalPenjualan: 0,
+            totalProfit: 0,
+            jumlahPelanggan: 0,
+            menuFavorit: "-"
+        });
 
         res.status(200).json(report);
     } catch (error) {
@@ -59,10 +65,57 @@ export const getYesterdayReport = async (req, res) => {
             }
         });
 
-        if (!report) return res.status(404).json({ message: "Belum ada laporan kemarin" });
+        if (!report) return res.status(200).json({
+            totalPenjualan: 0,
+            totalProfit: 0,
+            jumlahPelanggan: 0,
+            menuFavorit: "-"
+        });
 
         res.status(200).json(report);
     } catch (error) {
         res.status(500).json({ message: "Gagal mengambil laporan kemarin", error: error.message });
     }
 };
+
+// AMBIL LAPORAN BERDASARKAN TANGGAL
+export const getReportByDate = async (req, res) => {
+    try {
+        const { date } = req.params; // Format: YYYY-MM-DD
+        const selectedDate = new Date(date);
+        selectedDate.setHours(0, 0, 0, 0);
+
+        const nextDay = new Date(selectedDate);
+        nextDay.setDate(selectedDate.getDate() + 1);
+
+        const report = await DayReport.findOne({
+            createdAt: {
+                $gte: selectedDate,
+                $lt: nextDay
+            }
+        });
+
+        if (!report) {
+            return res.status(200).json({
+                totalPenjualan: 0,
+                totalProfit: 0,
+                jumlahPelanggan: 0,
+                menuFavorit: "-"
+            });
+        }
+
+        res.status(200).json(report);
+    } catch (error) {
+        res.status(500).json({ message: "Gagal mengambil laporan", error: error.message });
+    }
+};
+
+export const getAllReports = async (req, res, next) => {
+    try {
+        const reports = await DayReport.find().sort({ createdAt: -1 }); // sort biar yang terbaru di atas
+        res.status(200).json(reports);
+    } catch (error) {
+        next(errorHandler(500, 'Gagal mengambil laporan'));
+    }
+};
+

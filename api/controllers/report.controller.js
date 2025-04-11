@@ -85,11 +85,14 @@ export const allReport = async (req, res, next) => {
 
         const menuFavorit = Object.entries(menuCount).sort((a, b) => b[1] - a[1])[0]?.[0] || 'Belum ada';
 
+        const totalFavoritQuantity = menuCount[menuFavorit] || 0;
+
         res.status(200).json({
             totalPenjualan,
             totalProfit,
             totalCustomer,
             menuFavorit,
+            totalFavoritQuantity,
             transaksi: reports,
         });
     } catch (error) {
