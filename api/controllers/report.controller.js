@@ -100,3 +100,53 @@ export const allReport = async (req, res, next) => {
     }
 };
 
+export const deleteOrder = async (req, res, next) => {
+    try {
+        await Report.deleteMany({});
+        res.status(200).json({ message: 'Semua data report berhasil dihapus.' });
+    } catch (error) {
+        console.error('Error saat menghapus data report:', error);
+        res.status(500).json({ message: 'Gagal menghapus data report.' });
+    }
+};
+
+export const getTodayReport = async (req, res, next) => {
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const reports = await Report.find({
+            createdAt: { $gte: today, $lt: tomorrow }
+        });
+
+        const totalPenjualan = reports.reduce((acc, curr) => acc + curr.totalHarga, 0);
+        const totalProfit = reports.reduce((acc, curr) => acc + (curr.totalHarga * 0.3), 0); // misal profit 30%
+        const totalCustomer = reports.length;
+
+        const menuCount = {};
+        reports.forEach(report => {
+            report.items?.forEach(item => {
+                if (item.judul) {
+                    menuCount[item.judul] = (menuCount[item.judul] || 0) + item.quantity;
+                }
+            });
+        });
+
+        const menuFavorit = Object.entries(menuCount).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
+
+        res.status(200).json({
+            totalPenjualan,
+            totalProfit,
+            jumlahPelanggan: totalCustomer,
+            menuFavorit
+        });
+
+    } catch (error) {
+        next(errorHandler(500, "Gagal mengambil laporan hari ini"));
+    }
+};
+
+

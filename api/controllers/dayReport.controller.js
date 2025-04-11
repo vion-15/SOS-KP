@@ -20,35 +20,6 @@ export const saveDayReport = async (req, res) => {
     }
 };
 
-// AMBIL LAPORAN HARI INI
-export const getTodayReport = async (req, res) => {
-    try {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
-
-        const report = await DayReport.findOne({
-            createdAt: {
-                $gte: today,
-                $lt: tomorrow
-            }
-        });
-
-        if (!report) return res.status(200).json({
-            totalPenjualan: 0,
-            totalProfit: 0,
-            jumlahPelanggan: 0,
-            menuFavorit: "-"
-        });
-
-        res.status(200).json(report);
-    } catch (error) {
-        res.status(500).json({ message: "Gagal mengambil laporan hari ini", error: error.message });
-    }
-};
-
 // AMBIL LAPORAN KEMARIN
 export const getYesterdayReport = async (req, res) => {
     try {

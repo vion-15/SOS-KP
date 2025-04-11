@@ -29,7 +29,7 @@ export default function ReportPage() {
     useEffect(() => {
         const fetchCompareData = async () => {
             try {
-                const resToday = await fetch("/api/dayReport/today");
+                const resToday = await fetch("/api/report/today");
                 const resYesterday = await fetch("/api/dayReport/yesterday");
 
                 const today = await resToday.json();
@@ -61,15 +61,14 @@ export default function ReportPage() {
     const getDifference = (todayVal, yesterdayVal) => {
         if (todayVal == null || yesterdayVal == null) return "-";
         const diff = todayVal - yesterdayVal;
-        const isUp = diff > 0;
+        const isUp = diff >= 0;
         const color = isUp ? "text-green-600" : "text-red-600";
         return <span className={`text-sm ${color}`}>{isUp ? "↑" : "↓"} {Math.abs(diff)}</span>;
     };
 
     if (!reportData) return <p>Loading...</p>;
 
-    const handlePost = async (e) => {
-        e.preventDefault();
+    const handlePost = async () => {
 
         const dataToSend = {
             totalPenjualan: reportData.totalPenjualan,
@@ -78,8 +77,6 @@ export default function ReportPage() {
             menuFavorit: reportData.menuFavorit,
             jumlahQuantity: reportData.totalFavoritQuantity,
         };
-
-        console.log(dataToSend);
 
         try {
             const res = await fetch('/api/dayReport/save', {
@@ -108,7 +105,24 @@ export default function ReportPage() {
         }
     };
 
-    console.log(dayData);
+    const handleDelete = async () => {
+        try {
+            const res = await fetch('/api/report/deleteorder', {
+                method: 'DELETE',
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                console.log(data.message); // atau tampilkan notifikasi sukses
+            } else {
+                console.error(data.message);
+            }
+        } catch (err) {
+            console.error('Failed to delete reports:', err);
+        }
+    };
+
 
     return (
         <div className="p-6 space-y-6">
@@ -118,7 +132,12 @@ export default function ReportPage() {
                     <p className='text-lg'>Back</p>
                 </Link>
             </div>
-            <Button color="failure" onClick={handlePost}>Download Report</Button>
+            <Button color="failure" onClick={async () => {
+                await handlePost();
+                await handleDelete();
+            }}>
+                Download Report
+            </Button>
 
             {/* Modal */}
             <Modal show={showModal} onClose={() => setShowModal(false)}>
