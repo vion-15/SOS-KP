@@ -141,15 +141,15 @@ export default function ReportPage() {
     const handleDownloadPDF = () => {
         const element = reportRef.current;
         const opt = {
-            margin:       0.5,
-            filename:     `Laporan-${new Date().toLocaleDateString("id-ID")}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            margin: 0.5,
+            filename: `Laporan-${new Date().toLocaleDateString("id-ID")}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
     };
-    
+
 
 
     return (
@@ -182,73 +182,106 @@ export default function ReportPage() {
             </Modal>
 
             <div ref={reportRef}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {/* Card data */}
-                <div className="p-4 bg-white shadow rounded-xl">
-                    <p className="text-gray-500 text-sm">Total Penjualan</p>
-                    <p className="text-xl font-bold">Rp {reportData.totalPenjualan}</p>
-                    {todayReport && yesterdayReport && (
-                        <p className="text-sm text-gray-500">
-                            {getDifference(todayReport.totalPenjualan, yesterdayReport.totalPenjualan)}{" "}
-                            (
-                            {yesterdayReport.totalPenjualan === 0
-                                ? "100%" :
-                                `${Math.abs(
-                                    (
-                                        ((todayReport.totalPenjualan - yesterdayReport.totalPenjualan) / yesterdayReport.totalPenjualan) * 100
-                                    ).toFixed(2)
-                                )}%`
-                            }
-                            )
-                        </p>
-                    )}
-                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {/* Card data */}
+                    <div className="p-4 bg-white shadow rounded-xl">
+                        <p className="text-gray-500 text-sm">Total Penjualan</p>
+                        <p className="text-xl font-bold">Rp {reportData.totalPenjualan}</p>
+                        {todayReport && yesterdayReport && (
+                            <p className="text-sm text-gray-500">
+                                {getDifference(todayReport.totalPenjualan, yesterdayReport.totalPenjualan)}{" "}
+                                (
+                                {yesterdayReport.totalPenjualan === 0
+                                    ? "100%" :
+                                    `${Math.abs(
+                                        (
+                                            ((todayReport.totalPenjualan - yesterdayReport.totalPenjualan) / yesterdayReport.totalPenjualan) * 100
+                                        ).toFixed(2)
+                                    )}%`
+                                }
+                                )
+                            </p>
+                        )}
+                    </div>
 
-                <div className="p-4 bg-white shadow rounded-xl">
-                    <p className="text-gray-500 text-sm">Total Profit</p>
-                    <p className="text-xl font-bold">Rp {reportData.totalProfit}</p>
-                    {todayReport && yesterdayReport && (
-                        <p className="text-sm text-gray-500">
-                            {getDifference(todayReport.totalProfit, yesterdayReport.totalProfit)}{" "}
-                            (
-                            {yesterdayReport.totalProfit === 0
-                                ? "100%" :
-                                `${Math.abs(
-                                    (
-                                        ((todayReport.totalProfit - yesterdayReport.totalProfit) / yesterdayReport.totalProfit) * 100
-                                    ).toFixed(2)
-                                )}%`
-                            }
-                            )
-                        </p>
-                    )}
-                </div>
+                    <div className="p-4 bg-white shadow rounded-xl">
+                        <p className="text-gray-500 text-sm">Total Profit</p>
+                        <p className="text-xl font-bold">Rp {reportData.totalProfit}</p>
+                        {todayReport && yesterdayReport && (
+                            <p className="text-sm text-gray-500">
+                                {getDifference(todayReport.totalProfit, yesterdayReport.totalProfit)}{" "}
+                                (
+                                {yesterdayReport.totalProfit === 0
+                                    ? "100%" :
+                                    `${Math.abs(
+                                        (
+                                            ((todayReport.totalProfit - yesterdayReport.totalProfit) / yesterdayReport.totalProfit) * 100
+                                        ).toFixed(2)
+                                    )}%`
+                                }
+                                )
+                            </p>
+                        )}
+                    </div>
 
-                <div className="p-4 bg-white shadow rounded-xl">
-                    <p className="text-gray-500 text-sm">Jumlah Customer</p>
-                    <p className="text-xl font-bold">{reportData.totalCustomer}</p>
-                    {todayReport && yesterdayReport && (
-                        <p className="text-sm text-gray-500">
-                            {getDifference(todayReport.jumlahPelanggan, yesterdayReport.jumlahPelanggan)}{" "}
-                            (
-                            {yesterdayReport.jumlahPelanggan === 0
-                                ? "100%" :
-                                `${Math.abs(
-                                    (
-                                        ((todayReport.jumlahPelanggan - yesterdayReport.jumlahPelanggan) / yesterdayReport.jumlahPelanggan) * 100
-                                    ).toFixed(2)
-                                )}%`
-                            }
-                            )
-                        </p>
-                    )}
-                </div>
+                    <div className="p-4 bg-white shadow rounded-xl">
+                        <p className="text-gray-500 text-sm">Jumlah Customer</p>
+                        <p className="text-xl font-bold">{reportData.totalCustomer}</p>
+                        {todayReport && yesterdayReport && (
+                            <p className="text-sm text-gray-500">
+                                {getDifference(todayReport.jumlahPelanggan, yesterdayReport.jumlahPelanggan)}{" "}
+                                (
+                                {yesterdayReport.jumlahPelanggan === 0
+                                    ? "100%" :
+                                    `${Math.abs(
+                                        (
+                                            ((todayReport.jumlahPelanggan - yesterdayReport.jumlahPelanggan) / yesterdayReport.jumlahPelanggan) * 100
+                                        ).toFixed(2)
+                                    )}%`
+                                }
+                                )
+                            </p>
+                        )}
+                    </div>
 
-                <div className="p-4 bg-white shadow rounded-xl">
-                    <p className="text-gray-500 text-sm">Menu Favorit</p>
-                    <p className="text-xl font-bold">{reportData.menuFavorit}</p>
-                    <p><span className="font-semibold">{reportData.totalFavoritQuantity}</span> pcs</p>
+                    <div className="p-4 bg-white shadow rounded-xl">
+                        <p className="text-gray-500 text-sm">Menu Favorit</p>
+                        <p className="text-xl font-bold">{reportData.menuFavorit}</p>
+                        <p><span className="font-semibold">{reportData.totalFavoritQuantity}</span> pcs</p>
+                    </div>
                 </div>
+            
+
+            <div className="mt-6">
+                <h2 className="text-xl font-semibold mb-2">Menu yang Terjual :</h2>
+                <table className="w-full text-sm border-collapse">
+                    <thead>
+                        <tr className="bg-gray-100">
+                            <th className="border px-2 py-1">Nama Menu</th>
+                            <th className="border px-2 py-1">Jumlah Terjual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Object.entries(
+                            reportData.transaksi.reduce((acc, trx) => {
+                                trx.items.forEach(item => {
+                                    if (!acc[item.judul]) {
+                                        acc[item.judul] = 0;
+                                    }
+                                    acc[item.judul] += item.quantity;
+                                });
+                                return acc;
+                            }, {})
+                        )
+                            .sort((a, b) => b[1] - a[1]) // sort descending by quantity
+                            .map(([menu, qty]) => (
+                                <tr key={menu}>
+                                    <td className="border px-2 py-1">{menu}</td>
+                                    <td className="border px-2 py-1">{qty} pcs</td>
+                                </tr>
+                            ))}
+                    </tbody>
+                </table>
             </div>
             </div>
 
