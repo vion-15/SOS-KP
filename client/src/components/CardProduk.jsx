@@ -13,6 +13,7 @@ const ProductGrid = () => {
                 const res = await fetch("/api/post/getposts"); // Sesuaikan dengan endpoint kamu
                 const data = await res.json();
                 setProducts(data.posts); // Pastikan sesuai struktur respon
+                console.log(data.posts);
             } catch (err) {
                 console.error("Gagal ambil data menu:", err);
             }
@@ -20,6 +21,7 @@ const ProductGrid = () => {
 
         getMenu();
     }, []);
+    
 
     const handleAddToCart = async (product) => {
         try {
@@ -47,7 +49,7 @@ const ProductGrid = () => {
     };
 
     return (
-        <div className="grid grid-cols-2 gap-4 p-4">
+        <div className="grid grid-cols-3 gap-4 p-4">
             {products.map((product) => {
                 const hargaDiskon =
                     product.promo > 0
@@ -59,7 +61,7 @@ const ProductGrid = () => {
                         <img
                             src={product.image}
                             alt={product.judul}
-                            className="h-24 w-full object-cover rounded-md mb-2"
+                            className="h-full w-full object-cover rounded-md mb-2"
                         />
 
                         {/* Informasi & tombol dalam 1 baris */}
@@ -85,7 +87,7 @@ const ProductGrid = () => {
                             {/* Tombol bulat */}
                             <button
                                 onClick={() => handleAddToCart(product)}
-                                className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full ml-2"
+                                className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full ml-2"
                             >
                                 <FaPlusCircle className="w-4 h-4" />
                             </button>

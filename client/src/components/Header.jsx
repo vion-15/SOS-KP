@@ -10,7 +10,7 @@ export default function Header() {
     return (
         <header className='sticky top-0 z-50'>
             <Navbar className='border-b-2 flex 
-            justify-between bg-gray-200'>
+            justify-between bg-gray-100'>
 
                 <div className='flex flex-col w-full gap-3'>
                     <div className='flex flex-row justify-between 

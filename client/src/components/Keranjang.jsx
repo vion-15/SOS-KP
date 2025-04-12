@@ -180,7 +180,8 @@ export default function Keranjang() {
             <Button
                 onClick={handleList}
                 className={`fixed bottom-5 left-5 z-10 p-3 rounded-full
-                shadow-lg transition-opacity duration-300`}>
+                shadow-lg transition-opacity duration-300`}
+                color="failure">
                 <HiShoppingBag />
                 {cartCount > 0 && (
                     <span className="absolute top-0 right-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full">

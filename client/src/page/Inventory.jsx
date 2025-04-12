@@ -70,8 +70,13 @@ export default function Inventory() {
 
     return (
         <>
-            <div className='m-10'>
-            <h1 className="text-2xl font-bold mb-4">Dashboard Menu</h1>
+            <div className='mt-10 ml-10 flex flex-col gap-5'>
+            <div className='flex flex-row justify-between'>
+                <h2 className="text-2xl font-bold">Inventory</h2>
+                <Link to='/menuAdmin'>
+                    <p className='text-lg mr-5'>Back</p>
+                </Link>
+            </div>
             <Link to='/tambah-menu'>
                 <Button gradientDuoTone='purpleToBlue' className='mb-5' outline>
                     Tambah Menu Baru
