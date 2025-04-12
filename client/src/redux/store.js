@@ -4,11 +4,13 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import postReducer from "./post/postSlice";
 import cartReducer from "./keranjang/keranjangSlice";
+import storeStatusReducer from "./storestatus/storeSlice";
 
 const rootReducer = combineReducers({
     user: userReducer,
     cart: cartReducer,
     posts: postReducer,
+    storeStatus: storeStatusReducer,
 });
 
 const persistConfig = {

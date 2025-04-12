@@ -124,20 +124,35 @@ export default function MenuAdmin() {
 
     const handleSignout = async () => {
         try {
+            // Logout user
             const res = await fetch('/api/user/signout', {
                 method: 'POST'
             });
-            const data = await res.json();
-            if (!res.ok) {
-                console.log(data.message);
-            } else {
+    
+            if (res.ok) {
+                // Jika logout berhasil, ubah status toko menjadi 'closed'
+                const storeRes = await fetch('/api/store/logout', {
+                    method: 'PATCH',
+                });
+    
+                if (storeRes.ok) {
+                    console.log('Status toko berhasil diubah menjadi closed');
+                } else {
+                    console.log('Gagal merubah status toko');
+                }
+    
+                // Menangani state redux untuk signout
                 dispatch(signoutSuccess());
                 navigate('/');
+            } else {
+                const data = await res.json();
+                console.log(data.message || 'Gagal melakukan logout');
             }
         } catch (error) {
-            console.log(error)
+            console.log('Terjadi kesalahan:', error);
         }
     };
+    
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });

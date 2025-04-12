@@ -29,7 +29,15 @@ export default function AdminPage() {
             }
             if(res.ok){
                 dispatch(signInSuccess(data));
-                navigate('/menuAdmin')
+                
+                await fetch('/api/store/status', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({isOpen: true}),
+                });
+                navigate('/menuAdmin');
             }
         } catch (error) {
             dispatch(signInFailure(error.message));
