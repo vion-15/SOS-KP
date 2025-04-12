@@ -1,5 +1,42 @@
 import Report from "../models/report.model.js";
 import { errorHandler } from "../utils/error.js";
+import nodemailer from 'nodemailer';
+
+export const sendEmailConfirmation = async (username, meja, email, items, totalHarga, order_id) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER,  // Ganti dengan email kamu
+            pass: process.env.EMAIL_PASS,   // Ganti dengan password email kamu
+        },
+    });
+
+    // Membuat email konten
+    const mailOptions = {
+        from: 'your-email@gmail.com',
+        to: email,
+        subject: `Pesanan #${order_id} Konfirmasi`,
+        html: `
+            <h1>Terima kasih, ${username}!</h1>
+            <p>Pesanan Anda dengan ID #${order_id} telah berhasil diproses.</p>
+            <h3>Detail Pesanan:</h3>
+            <ul>
+                ${items
+                .map((item) => `<li>${item.judul} - Qty: ${item.quantity} - Rp ${item.totalHargaItem}</li>`)
+                .join('')}
+            </ul>
+            <p><strong>Total Harga: Rp ${totalHarga}</strong></p>
+            <p>Nomor Meja: ${meja}</p>
+        `,
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+    } catch (error) {
+        throw new Error('Gagal mengirim email konfirmasi');
+    }
+};
+
 
 export const laporan = async (req, res, next) => {
     try {
@@ -35,6 +72,8 @@ export const laporan = async (req, res, next) => {
             laporan = new Report({ username, meja, email, items, totalHarga, order_id, status_payment });
             await laporan.save();
         }
+
+        await sendEmailConfirmation(username, meja, email, items, totalHarga, order_id);
 
         res.status(201).json(laporan);
     } catch (error) {

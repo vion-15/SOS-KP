@@ -184,7 +184,7 @@ export default function Keranjang() {
                 color="failure">
                 <HiShoppingBag />
                 {cartCount > 0 && (
-                    <span className="absolute top-0 right-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full">
+                    <span className="absolute top-0 right-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-orange-400 rounded-full">
                         {cartCount}
                     </span>
                 )}
@@ -209,6 +209,9 @@ export default function Keranjang() {
                         <Label htmlFor="email" value="E-mail (untuk bukti transaksi)" />
                         <TextInput required type="email" placeholder="E-mail" value={email} 
                         onChange={(e) => setEmail(e.target.value)}></TextInput>
+                        <div className="text-center mt-5 bg-red-500 rounded-lg">
+                            <h2 className="text-white font-semibold p-5">Jika Email tidak muncul di Inbox, Tolong cek di Spam</h2>
+                        </div>
                     </form>
                     {cartItems.length > 0 ? (
                         <>
@@ -286,7 +289,6 @@ export default function Keranjang() {
                                                         await handleDelete(item._id);
                                                     }
                                                     navigate('/');
-                                                    alert("Pembayaran Berhasil & Pesanan Diterima");
                                                 },
                                                 onPending: function () {
                                                     alert("Menunggu pembayaran");
