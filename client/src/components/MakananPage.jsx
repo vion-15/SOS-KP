@@ -2,13 +2,11 @@ import { MdRestaurantMenu } from "react-icons/md";
 import { RiDrinksFill } from "react-icons/ri";
 import { PiBowlFoodFill } from "react-icons/pi";
 import { LuDessert } from "react-icons/lu";
-import { Button } from "flowbite-react";
-import { FaShoppingBag } from "react-icons/fa";
-import { FaArrowUp } from "react-icons/fa";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import CardMakanan from "./CardMakanan";
+import Keranjang from "./Keranjang";
 
 export default function MakananPage() {
     const [products, setProducts] = useState([]);
@@ -45,73 +43,76 @@ export default function MakananPage() {
     return (
         <>
             <Header />
-            <div className="min-h-screen bg-gray-200">
-                <div className="flex gap-3 overflow-x-auto py-5 px-5 hide-scrollbar">
-                    <Link to="/">
-                        <div className={`flex flex-col items-center gap-2 p-3 border rounded-xl justify-center min-w-[150px] cursor-pointer 
-                        ${isActive("/") ? "bg-red-500 text-white" : "bg-white text-black"}`}>
-                            <MdRestaurantMenu size="30" />
-                            <p>All Menu</p>
-                            <div className={`flex flex-row text-gray-600 gap-1
-                            ${isActive("/") ? "text-white" : "text-black"}`}>
-                                {productCount}
-                                <p>items</p>
-                            </div>
-                        </div>
-                    </Link>
+            <div className="min-h-screen bg-gray-100">
+                <div className="w-full overflow-x-auto py-5 hide-scrollbar">
+                    <div className="w-fit mx-auto">
+                        <div className="flex gap-4 px-4">
+                            {/* All Menu */}
+                            <Link to="/">
+                                <div
+                                    className={`flex flex-col items-center gap-2 p-4 border rounded-xl min-w-[140px] cursor-pointer 
+                                    ${isActive("/") ? "bg-red-500 text-white" : "bg-white text-gray-800"}`}
+                                >
+                                    <MdRestaurantMenu size="28" />
+                                    <p className="text-sm font-medium">All Menu</p>
+                                    <span className={`${isActive("/") ? "text-white" : "text-gray-600"}`}>
+                                        {productCount} items
+                                    </span>
+                                </div>
+                            </Link>
 
-                    <Link to="/minuman">
-                    <div className={`flex flex-col items-center gap-2 p-3 border rounded-xl justify-center min-w-[150px] cursor-pointer 
-                        ${isActive("/minuman") ? "bg-red-500 text-white" : "bg-white text-black"}`}>
-                        <RiDrinksFill size="30"/>
-                        <p>Drinks</p>
-                        <div className={`flex flex-row text-gray-600 gap-1
-                            ${isActive("/minuman") ? "text-white" : "text-black"}`}>
-                            {minumanCount}
-                            <p>items</p>
+                            {/* Drinks */}
+                            <Link to="/minuman">
+                                <div
+                                    className={`flex flex-col items-center gap-2 p-4 border rounded-xl min-w-[140px] cursor-pointer 
+                                    ${isActive("/minuman") ? "bg-red-500 text-white" : "bg-white text-gray-800"}`}
+                                >
+                                    <RiDrinksFill size="28" />
+                                    <p className="text-sm font-medium">Drinks</p>
+                                    <span className={`${isActive("/minuman") ? "text-white" : "text-gray-600"}`}>
+                                        {minumanCount} items
+                                    </span>
+                                </div>
+                            </Link>
+
+                            {/* Foods */}
+                            <Link to="/makanan">
+                                <div
+                                    className={`flex flex-col items-center gap-2 p-4 border rounded-xl min-w-[140px] cursor-pointer 
+                                    ${isActive("/makanan") ? "bg-red-500 text-white" : "bg-white text-gray-800"}`}
+                                >
+                                    <PiBowlFoodFill size="28" />
+                                    <p className="text-sm font-medium">Foods</p>
+                                    <span className={`${isActive("/makanan") ? "text-white" : "text-gray-600"}`}>
+                                        {makananCount} items
+                                    </span>
+                                </div>
+                            </Link>
+
+                            {/* Dessert */}
+                            <Link to="/dessert">
+                                <div
+                                    className={`flex flex-col items-center gap-2 p-4 border rounded-xl min-w-[140px] cursor-pointer 
+                                    ${isActive("/dessert") ? "bg-red-500 text-white" : "bg-white text-gray-800"}`}
+                                >
+                                    <LuDessert size="28" />
+                                    <p className="text-sm font-medium">Dessert</p>
+                                    <span className={`${isActive("/dessert") ? "text-white" : "text-gray-600"}`}>
+                                        {dessertCount} items
+                                    </span>
+                                </div>
+                            </Link>
                         </div>
                     </div>
-                    </Link>
-                    
-                    <Link to="/makanan">
-                    <div className={`flex flex-col items-center gap-2 p-3 border rounded-xl justify-center min-w-[150px] cursor-pointer 
-                        ${isActive("/makanan") ? "bg-red-500 text-white" : "bg-white text-black"}`}>
-                        <PiBowlFoodFill size="30" />
-                        <p>Foods</p>
-                        <div className={`flex flex-row text-gray-600 gap-1
-                            ${isActive("/makanan") ? "text-white" : "text-black"}`}>
-                            {makananCount}
-                            <p>items</p>
-                        </div>
-                    </div>
-                    </Link>
-                    
-                    <Link to="/dessert">
-                    <div className={`flex flex-col items-center gap-2 p-3 border rounded-xl justify-center min-w-[150px] cursor-pointer 
-                        ${isActive("/dessert") ? "bg-red-500 text-white" : "bg-white text-black"}`}>
-                        <LuDessert size="30"/>
-                        <p>Dessert</p>
-                        <div className={`flex flex-row text-gray-600 gap-1
-                            ${isActive("/dessert") ? "text-white" : "text-black"}`}>
-                            {dessertCount}
-                            <p>items</p>
-                        </div>
-                    </div>
-                    </Link>
                 </div>
 
+                <div className="fixed left-5 bottom-5 z-50">
+                    <Keranjang />
+                </div>
 
-                <Button className="fixed bottom-4 left-4 rounded-full p-3 z-50"
-                    color="failure">
-                    <FaShoppingBag />
-                </Button>
-
-                <Button className="fixed bottom-4 right-4 rounded-full p-3 z-50"
-                    color="failure">
-                    <FaArrowUp />
-                </Button>
-
-                <CardMakanan />
+                <div className="w-full max-w-screen-lg mx-auto px-4 pb-10">
+                    <CardMakanan products={products} />
+                </div>
             </div>
         </>
     )
