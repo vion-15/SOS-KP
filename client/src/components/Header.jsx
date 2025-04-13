@@ -1,9 +1,9 @@
-import { Navbar } from 'flowbite-react';
+import { Button, Modal, Navbar } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { FaPowerOff } from "react-icons/fa";
 import SearchOverlay from './SearchOverlay';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { setStoreStatus } from '../redux/storestatus/storeSlice';
 
 export default function Header() {
@@ -11,6 +11,7 @@ export default function Header() {
     const isAdminLogin = currentUser?.isAdmin === true;
     const dispatch = useDispatch();
     const { isOpen } = useSelector((state) => state.storeStatus);
+    const [showClosedModal, setShowClosedModal] = useState(false);
 
     useEffect(() => {
         const fetchStoreStatus = async () => {
@@ -27,6 +28,12 @@ export default function Header() {
 
         fetchStoreStatus();
     }, [dispatch]);
+
+    useEffect(() => {
+        if(!isOpen){
+            setShowClosedModal(true);
+        }
+    }, [isOpen]);
 
     return (
         <header className='sticky top-0 z-50'>
@@ -62,6 +69,21 @@ export default function Header() {
                     </div>
                 </div>
             </Navbar>
+
+            <Modal show={showClosedModal} onClose={() => setShowClosedModal(false)}>
+                <Modal.Header>
+                    <p className='text-red-600 font-bold'>CLOSED</p>
+                </Modal.Header>
+                <Modal.Body>
+                <p className='text-xl'>Maaf, toko masih tutup. Tolong akses web ini jika toko sudah buka dan pastikan lokasi Anda berada di sekitar toko.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={() => setShowClosedModal(false)}
+                        color='failure'>
+                        Tutup
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </header>
     )
 }
