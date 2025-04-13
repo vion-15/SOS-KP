@@ -1,7 +1,7 @@
 import { Button, Modal } from "flowbite-react";
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState, useEffect } from "react";
-import ProductGrid from "./CardProduk";
+import SearchResultGrid from "./SearchResultGrid";
 
 export default function SearchOverlay() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -30,24 +30,28 @@ export default function SearchOverlay() {
         fetchFilteredProducts();
     }, [searchQuery]);
 
+    const handleClose = () => {
+        setShowSearch(false);
+        setSearchQuery("")
+    };
+
     return (
         <>
-            <Modal show={showSearch} onClose={() => setShowSearch(false)} size="xl">
+            <Modal show={showSearch} onClose={handleClose} size="xl">
                 <Modal.Header>Pencarian Menu</Modal.Header>
                 <Modal.Body>
                     <input
                         type="text"
                         autoFocus
-                        placeholder="Cari menu..."
+                        placeholder="Cari menu...."
                         className="w-full p-2 border border-gray-300 rounded-md mb-4"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
 
-                    <ProductGrid
-                        products={filteredProducts}
-                        isFiltered={isFiltered}
-                    />
+                    <p className="text-center mt-5 text-gray-600">Mohon maaf menu yang kamu cari tidak tersedia</p>
+
+                    <SearchResultGrid products={filteredProducts} />
                 </Modal.Body>
             </Modal>
 
