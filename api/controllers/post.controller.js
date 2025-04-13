@@ -8,7 +8,7 @@ export const create = async (req, res, next) => {
     if(!req.user.isAdmin){
         return next(errorHandler(403,'Kamu tidak diizikan menambah menu baru'));
     }
-    if (!req.body.judul || !req.body.harga || !req.body.stock || !req.body.category || !req.body.image) {
+    if (!req.body.judul || !req.body.stock || !req.body.category || !req.body.image) {
         return next(errorHandler(400, 'Tolong isi semua kolom yang wajib diisi'));
     }
     const slug = req.body.judul.split(' ').join('-').toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
@@ -88,6 +88,14 @@ export const updatepost = async (req, res, next) => {
                     image: req.body.image,
                     category: req.body.category,
                     harga: req.body.harga,
+                    jenis: {
+                        panas: req.body.jenis.panas,
+                        dingin: req.body.jenis.dingin,
+                    },
+                    tipe: {
+                        houseBlend: req.body.tipe.houseBlend,
+                        singelOrigin: req.body.tipe.singelOrigin,
+                    },
                     stock: req.body.stock,
                     promo: req.body.promo,
                 }

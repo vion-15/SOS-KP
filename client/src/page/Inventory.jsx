@@ -71,17 +71,17 @@ export default function Inventory() {
     return (
         <>
             <div className='mt-10 ml-10 flex flex-col gap-5'>
-            <div className='flex flex-row justify-between'>
-                <h2 className="text-2xl font-bold">Inventory</h2>
-                <Link to='/menuAdmin'>
-                    <p className='text-lg mr-5'>Back</p>
+                <div className='flex flex-row justify-between'>
+                    <h2 className="text-2xl font-bold">Inventory</h2>
+                    <Link to='/menuAdmin'>
+                        <p className='text-lg mr-5'>Back</p>
+                    </Link>
+                </div>
+                <Link to='/tambah-menu'>
+                    <Button gradientDuoTone='purpleToBlue' className='mb-5' outline>
+                        Tambah Menu Baru
+                    </Button>
                 </Link>
-            </div>
-            <Link to='/tambah-menu'>
-                <Button gradientDuoTone='purpleToBlue' className='mb-5' outline>
-                    Tambah Menu Baru
-                </Button>
-            </Link>
             </div>
             <div className='hidden md:block table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300
         dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
@@ -96,6 +96,10 @@ export default function Inventory() {
                                 <Table.HeadCell>Harga</Table.HeadCell>
                                 <Table.HeadCell>Stock</Table.HeadCell>
                                 <Table.HeadCell>Promo</Table.HeadCell>
+                                <Table.HeadCell>Panas</Table.HeadCell>
+                                <Table.HeadCell>Dingin</Table.HeadCell>
+                                <Table.HeadCell>House Blend</Table.HeadCell>
+                                <Table.HeadCell>Single Origin</Table.HeadCell>
                                 <Table.HeadCell>Delete</Table.HeadCell>
                                 <Table.HeadCell>
                                     <span>Edit</span>
@@ -118,15 +122,49 @@ export default function Inventory() {
                                         <Table.Cell>{post.category}</Table.Cell>
 
                                         <Table.Cell>
-                                            {post.promo > 0
-                                                ? `${((post.harga * (100 - post.promo)) / 100).toLocaleString()}`
-                                                : `${post.harga.toLocaleString()}`}
+                                            {typeof post.harga === "number" && typeof post.promo === "number"
+                                                ? post.promo > 0
+                                                    ? ((post.harga * (100 - post.promo)) / 100).toLocaleString()
+                                                    : post.harga.toLocaleString()
+                                                : "0"}
                                         </Table.Cell>
 
 
                                         <Table.Cell>{post.stock}</Table.Cell>
 
                                         <Table.Cell>{post.promo}</Table.Cell>
+
+                                        <Table.Cell>
+                                        {typeof post.jenis.panas === "number" && typeof post.promo === "number"
+                                                ? post.promo > 0
+                                                    ? ((post.jenis.panas * (100 - post.promo)) / 100).toLocaleString()
+                                                    : post.jenis.panas.toLocaleString()
+                                                : "0"}
+                                        </Table.Cell>
+
+                                        <Table.Cell>
+                                        {typeof post.jenis.dingin === "number" && typeof post.promo === "number"
+                                                ? post.promo > 0
+                                                    ? ((post.jenis.dingin * (100 - post.promo)) / 100).toLocaleString()
+                                                    : post.jenis.dingin.toLocaleString()
+                                                : "0"}
+                                        </Table.Cell>
+
+                                        <Table.Cell>
+                                        {typeof post.tipe.houseBlend === "number" && typeof post.promo === "number"
+                                                ? post.promo > 0
+                                                    ? ((post.tipe.houseBlend * (100 - post.promo)) / 100).toLocaleString()
+                                                    : post.tipe.houseBlend.toLocaleString()
+                                                : "0"}
+                                        </Table.Cell>
+
+                                        <Table.Cell>
+                                        {typeof post.tipe.singelOrigin === "number" && typeof post.promo === "number"
+                                                ? post.promo > 0
+                                                    ? ((post.tipe.singelOrigin * (100 - post.promo)) / 100).toLocaleString()
+                                                    : post.tipe.singelOrigin.toLocaleString()
+                                                : "0"}
+                                        </Table.Cell>
 
                                         <Table.Cell>
                                             <span onClick={() => {
@@ -184,9 +222,16 @@ export default function Inventory() {
                         <p className="text-sm text-gray-600 dark:text-gray-300">Kategori: {post.category}</p>
                         <p className="text-sm text-gray-600 dark:text-gray-300">
                             Harga: Rp{' '}
-                            {post.promo > 0
-                                ? ((post.harga * (100 - post.promo)) / 100).toLocaleString()
-                                : post.harga.toLocaleString()}
+                            {post.jenis && post.jenis.panas && post.jenis.dingin
+                                ? `${((post.jenis.panas * (100 - post.promo)) / 100).toLocaleString()} (Panas) / ${((post.jenis.dingin * (100 - post.promo)) / 100).toLocaleString()} (Dingin)`
+                                : post.tipe && post.tipe.houseBlend && post.tipe.singelOrigin
+                                    ? `${((post.tipe.houseBlend * (100 - post.promo)) / 100).toLocaleString()} (House Blend) / ${((post.tipe.singelOrigin * (100 - post.promo)) / 100).toLocaleString()} (Single Origin)`
+                                    : typeof post.harga === "number" && typeof post.promo === "number"
+                                        ? post.promo > 0
+                                            ? ((post.harga * (100 - post.promo)) / 100).toLocaleString()
+                                            : post.harga.toLocaleString()
+                                        : "0"
+                            }
                         </p>
                         <p className="text-sm text-gray-600 dark:text-gray-300">Stok: {post.stock}</p>
                         <p className="text-sm text-gray-600 dark:text-gray-300">Promo: {post.promo}%</p>

@@ -4,7 +4,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from "../firebase";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 export default function UpdateMenu() {
@@ -13,11 +13,21 @@ export default function UpdateMenu() {
     const [imageUploadError, setImageUploadError] = useState(null);
     const [formData, setFormData] = useState({
         promo: '',
+        jenis: {
+            panas: '',
+            dingin: '',
+        },
+        tipe: {
+            houseBlend: '',
+            singelOrigin: '',
+        }
     });
     const [publishError, setPublishError] = useState(null);
     const navigate = useNavigate();
     const { postId } = useParams();
     const { currentUser } = useSelector((state) => state.user);
+    const [isJenisChecked, setIsJenisChecked] = useState(false);
+    const [isTipeChecked, setIsTipeChecked] = useState(false);
     console.log(formData);
 
     useEffect(() => {
@@ -109,10 +119,12 @@ export default function UpdateMenu() {
     return (
         <div className="p-3 max-w-3xl
         mx-auto min-h-screen">
-            <h1 className="text-center
-            text-3xl my-7 font-semibold">
-                Update Menu
-            </h1>
+            <div className='flex flex-row justify-between mt-10 mb-10 pb-4 border-b-4'>
+                    <h2 className="text-2xl font-bold">Update Menu</h2>
+                    <Link to='/inventory'>
+                        <p className='text-lg mr-5'>Back</p>
+                    </Link>
+            </div>
             <form className="flex flex-col
             gap-4" onSubmit={handleSubmit}>
                 <div className="flex flex-col
@@ -133,8 +145,103 @@ export default function UpdateMenu() {
 
                 <Label htmlFor="harga" value="Harga :" />
                 <TextInput type='number' placeholder='Harga'
-                    required id='harga' className='flex-1'
-                    onChange={(e) => setFormData({ ...formData, harga: e.target.value })} value={formData.harga} />
+                    id='harga' className='flex-1' value={formData.harga}
+                    disabled={isJenisChecked || isTipeChecked}
+                    onChange={(e) => setFormData({ ...formData, harga: e.target.value })} />
+
+                <Label value="Jenis Minuman & Harga:" />
+                <div className="flex items-center gap-2 mb-2">
+                    <Checkbox
+                        id="checkJenis"
+                        checked={isJenisChecked}
+                        onChange={(e) => setIsJenisChecked(e.target.checked)}
+                    />
+                    <Label htmlFor="checkJenis" className="text-sm">
+                        Aktifkan harga minuman panas & dingin
+                    </Label>
+                </div>
+
+                <div className="flex flex-col gap-2 sm:flex-row justify-between">
+                    <div className="flex flex-col gap-1 flex-1">
+                        <Label htmlFor="panas" value="Harga Panas (Hot)" />
+                        <TextInput
+                            type="number"
+                            placeholder="Harga minuman panas"
+                            id="panas"
+                            disabled={!isJenisChecked}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    jenis: { ...prev.jenis, panas: e.target.value },
+                                }))
+                            }
+                            value={formData.jenis.panas}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1 flex-1">
+                        <Label htmlFor="dingin" value="Harga Dingin (Cold)" />
+                        <TextInput
+                            type="number"
+                            placeholder="Harga minuman dingin"
+                            id="dingin"
+                            disabled={!isJenisChecked}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    jenis: { ...prev.jenis, dingin: e.target.value },
+                                }))
+                            }
+                            value={formData.jenis.dingin}
+                        />
+                    </div>
+                </div>
+
+                <Label value="Tipe Kopi & Harga:" />
+                <div className="flex items-center gap-2 mb-2">
+                    <Checkbox
+                        id="checkJenis"
+                        checked={isTipeChecked}
+                        onChange={(e) => setIsTipeChecked(e.target.checked)}
+                    />
+                    <Label htmlFor="checkJenis" className="text-sm">
+                        Aktifkan harga Kopi House Blend & Singel Oringin
+                    </Label>
+                </div>
+
+                <div className="flex flex-col gap-2 sm:flex-row justify-between">
+                    <div className="flex flex-col gap-1 flex-1">
+                        <Label htmlFor="houseBland" value="Harga House Blend" />
+                        <TextInput
+                            type="number"
+                            placeholder="Harga House Blend"
+                            id="houseBlend"
+                            disabled={!isTipeChecked}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    tipe: { ...prev.tipe, houseBlend: e.target.value },
+                                }))
+                            }
+                            value={formData.tipe.houseBlend}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1 flex-1">
+                        <Label htmlFor="singelOrigin" value="Harga Singel Origin" />
+                        <TextInput
+                            type="number"
+                            placeholder="Harga Singel Origin"
+                            id="singelOrigin"
+                            disabled={!isTipeChecked}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    tipe: { ...prev.tipe, singelOrigin: e.target.value },
+                                }))
+                            }
+                            value={formData.tipe.singelOrigin}
+                        />
+                    </div>
+                </div>
 
                 <Label htmlFor="stock" value="Stock :" />
                 <TextInput type='number' placeholder='Stock'
@@ -148,7 +255,7 @@ export default function UpdateMenu() {
                         max="100"
                         placeholder="Diskon (%)"
                         className="flex-1"
-                        onChange={(e) => setFormData({ ...formData, promo: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, promo: e.target.value })}
                         value={formData.promo}
                     />
                 </div>

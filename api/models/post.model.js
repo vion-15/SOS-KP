@@ -13,7 +13,27 @@ const postSchema = new mongoose.Schema(
         },
         harga: {
             type: Number,
-            required: true,
+            default: 0,
+        },
+        jenis: {
+            panas: {
+                type: Number,
+                default: 0,
+            },
+            dingin: {
+                type: Number,
+                default: 0,
+            },
+        },
+        tipe: {
+            houseBlend: {
+                type: Number,
+                default: 0,
+            },
+            singelOrigin: {
+                type: Number,
+                default: 0,
+            },
         },
         stock: {
             type: Number,
@@ -34,8 +54,8 @@ const postSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-        }, 
-    }, {timestamps: true}
+        },
+    }, { timestamps: true }
 );
 
 const Post = mongoose.model('Post', postSchema);
