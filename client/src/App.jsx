@@ -10,6 +10,7 @@ import MakananPage from "./components/MakananPage";
 import DessertPage from "./components/DessertPage";
 import Activity from "./page/ActivityPage";
 import ReportPage from "./page/ReportPage";
+import PrivatRoute from "./components/PrivatRoute";
 
 export default function App() {
   return (
@@ -17,15 +18,17 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/AdminLogin" element={<AdminPage />} />
-        <Route path="/menuAdmin" element={<MenuAdmin />} />
-        <Route path="/inventory" element={<Inventory />} />
-        <Route path="/tambah-menu" element={<AddMenu />} />
-        <Route path="/update-post/:postId" element={<UpdateMenu />} />
         <Route path="/minuman" element={<MinumanPage />} />
         <Route path="/makanan" element={<MakananPage />} />
         <Route path="/dessert" element={<DessertPage />} />
-        <Route path="/activity" element={<Activity />} />
-        <Route path="/report" element={<ReportPage />} />
+        <Route element={<PrivatRoute />}>
+          <Route path="/activity" element={<Activity />} />
+          <Route path="/report" element={<ReportPage />} />
+          <Route path="/update-post/:postId" element={<UpdateMenu />} />
+          <Route path="/menuAdmin" element={<MenuAdmin />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/tambah-menu" element={<AddMenu />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
