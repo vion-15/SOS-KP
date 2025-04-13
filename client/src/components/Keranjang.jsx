@@ -107,8 +107,7 @@ export default function Keranjang() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    stock: stock,
-                    quantity: quantity,
+                    stock: stock - quantity,
                 }),
             });
 

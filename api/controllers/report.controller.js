@@ -2,7 +2,7 @@ import Report from "../models/report.model.js";
 import { errorHandler } from "../utils/error.js";
 import nodemailer from 'nodemailer';
 
-export const sendEmailConfirmation = async (username, meja, email, items, totalHarga, order_id) => {
+export const sendEmailConfirmation = async (username, meja, email, items, totalHarga, order_id, tipe, jenis) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -22,12 +22,17 @@ export const sendEmailConfirmation = async (username, meja, email, items, totalH
             <h3>Detail Pesanan:</h3>
             <ul>
                 ${items
-                .map((item) => `<li>${item.judul} - Qty: ${item.quantity} - Rp ${item.totalHargaItem}</li>`)
-                .join('')}
-            </ul>
+                .map((item) => {
+                    const tipe = item.tipe || "-";
+                    const jenis = item.jenis || "-";
+                    return `<li>${item.judul} - Qty: ${item.quantity} - Rp ${item.totalHargaItem} - Tipe: ${tipe} - Jenis: ${jenis}</li>`;
+                })
+                .join('')
+    }
+            </ul >
             <p><strong>Total Harga: Rp ${totalHarga}</strong></p>
             <p>Nomor Meja: ${meja}</p>
-        `,
+`,
     };
 
     try {
