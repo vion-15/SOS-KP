@@ -11,6 +11,7 @@ import FooterCom from "../components/Footer";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [productCount, setProductCount] = useState(0);
     const [makananCount, setMakananCount] = useState(0);
     const [minumanCount, setMinumanCount] = useState(0);
@@ -36,6 +37,7 @@ export default function Home() {
                 );
 
                 setProducts(data.posts);
+                setFilteredProducts(data.posts);
                 setProductCount(data.posts.length);
                 setMakananCount(kategorimakanan.length);
                 setMinumanCount(kategoriminuman.length);
@@ -48,6 +50,14 @@ export default function Home() {
         getMenu();
     }, []);
 
+    const filterByCategory = (category) => {
+        if (category === "All") {
+            setFilteredProducts(products); // Show all products
+        } else {
+            setFilteredProducts(products.filter(product => product.category === category));
+        }
+    };
+
     return (
         <>
             <Header />
@@ -58,7 +68,7 @@ export default function Home() {
                     <div className="w-fit mx-auto">
                         <div className="flex gap-4 px-4">
                             {/* All Menu */}
-                            <Link to="/">
+                            <Link to="/" onClick={() => filterByCategory("All")}>
                                 <div
                                     className={`flex flex-col items-center gap-2 p-4 border rounded-xl min-w-[140px] cursor-pointer 
                                     ${isActive("/") ? "bg-red-500 text-white" : "bg-white text-gray-800"}`}
@@ -72,7 +82,7 @@ export default function Home() {
                             </Link>
 
                             {/* Drinks */}
-                            <Link to="/minuman">
+                            <Link to="/minuman" onClick={() => filterByCategory("Minuman")}>
                                 <div
                                     className={`flex flex-col items-center gap-2 p-4 border rounded-xl min-w-[140px] cursor-pointer 
                                     ${isActive("/minuman") ? "bg-red-500 text-white" : "bg-white text-gray-800"}`}
@@ -86,7 +96,7 @@ export default function Home() {
                             </Link>
 
                             {/* Foods */}
-                            <Link to="/makanan">
+                            <Link to="/makanan" onClick={() => filterByCategory("Makanan")}>
                                 <div
                                     className={`flex flex-col items-center gap-2 p-4 border rounded-xl min-w-[140px] cursor-pointer 
                                     ${isActive("/makanan") ? "bg-red-500 text-white" : "bg-white text-gray-800"}`}
@@ -100,7 +110,7 @@ export default function Home() {
                             </Link>
 
                             {/* Dessert */}
-                            <Link to="/dessert">
+                            <Link to="/dessert" onClick={() => filterByCategory("Dessert")}>
                                 <div
                                     className={`flex flex-col items-center gap-2 p-4 border rounded-xl min-w-[140px] cursor-pointer 
                                     ${isActive("/dessert") ? "bg-red-500 text-white" : "bg-white text-gray-800"}`}
@@ -123,7 +133,7 @@ export default function Home() {
 
                 {/* Produk */}
                 <div className="w-full max-w-screen-lg mx-auto px-4 pb-10">
-                    <ProductGrid products={products} />
+                    <ProductGrid products={filteredProducts} isFiltered={true} />
                 </div>
             </div>
 

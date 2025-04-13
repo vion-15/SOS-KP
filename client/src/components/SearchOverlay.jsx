@@ -1,63 +1,52 @@
 import { Button, Modal } from "flowbite-react";
 import { AiOutlineSearch } from 'react-icons/ai';
-import { useEffect, useState } from "react";
-import ProductGridSearch from "./ProductGridSearch";
+import { useState, useEffect } from "react";
+import ProductGrid from "./CardProduk";
 
-export default function SearchButton() {
+export default function SearchOverlay() {
     const [searchQuery, setSearchQuery] = useState("");
     const [showSearch, setShowSearch] = useState(false);
-    const [allProducts, setAllProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [isFiltered, setIsFiltered] = useState(false);
 
     useEffect(() => {
-        const fetchAllProducts = async () => {
+        const fetchFilteredProducts = async () => {
+            if (searchQuery.trim() === "") {
+                setIsFiltered(false); // Tidak ada hasil pencarian
+                setFilteredProducts([]); // Kosongkan produk
+                return;
+            }
+
             try {
-                const res = await fetch("/api/post/getposts");
+                const res = await fetch(`/api/post/getposts?searchTerm=${searchQuery}`);
                 const data = await res.json();
-                setAllProducts(data.posts);
-            } catch (error) {
-                console.error("Gagal fetch:", error.message);
+                setFilteredProducts(data.posts);
+                setIsFiltered(true);
+            } catch (err) {
+                console.error("Gagal fetch hasil pencarian:", err);
             }
         };
-        fetchAllProducts();
-    }, []);
 
-    useEffect(() => {
-        if (searchQuery.trim() === "") {
-            setFilteredProducts([]);
-            return;
-        }
-
-        const filtered = allProducts.filter(product =>
-            product.judul.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-
-        setFilteredProducts(filtered);
-    }, [searchQuery, allProducts]);
-
-    const handleAddToCart = (product) => {
-        console.log("Tambah ke keranjang:", product.judul);
-    };
+        fetchFilteredProducts();
+    }, [searchQuery]);
 
     return (
         <>
             <Modal show={showSearch} onClose={() => setShowSearch(false)} size="xl">
-                <Modal.Header>
-                    Pencarian Menu
-                </Modal.Header>
+                <Modal.Header>Pencarian Menu</Modal.Header>
                 <Modal.Body>
                     <input
-                        autoFocus
                         type="text"
+                        autoFocus
                         placeholder="Cari menu..."
+                        className="w-full p-2 border border-gray-300 rounded-md mb-4"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded-md mb-4"
                     />
 
-                    <ProductGridSearch
+                    <ProductGrid
                         products={filteredProducts}
-                        onAddToCart={handleAddToCart}
+                        isFiltered={isFiltered}
                     />
                 </Modal.Body>
             </Modal>
@@ -68,7 +57,8 @@ export default function SearchButton() {
                 className="text-gray-500 shadow-lg w-full"
                 onClick={() => setShowSearch(true)}
             >
-                <AiOutlineSearch className="w-5 h-5 mr-2" /> Search...
+                <AiOutlineSearch className="w-5 h-5 mr-2" />
+                Search...
             </Button>
         </>
     );
