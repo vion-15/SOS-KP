@@ -91,6 +91,8 @@ export default function Activity() {
                             {report.items.map((item, idx) => (
                                 <li key={idx}>
                                     {item.judul} x {item.quantity}
+                                    <br />
+                                    <p>Tipe/Jenis : {item.tipe || item.jenis || "-"}</p>
                                 </li>
                             ))}
                         </ul>

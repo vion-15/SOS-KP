@@ -132,6 +132,8 @@ export default function Keranjang() {
         const itemsToPost = cartItems.map((item) => ({
             id: item._id,
             judul: item.judul,
+            tipe: item.tipe,
+            jenis: item.jenis,
             quantity: item.quantity,
             stock: item.stock,
             harga: item.promo !== 0 ? item.harga * (100 - item.promo) / 100 : item.harga,
@@ -224,6 +226,9 @@ export default function Keranjang() {
                                     />
                                     <div className="flex-1">
                                         <p className="text-sm font-semibold text-gray-800">{post.judul}</p>
+                                        <p className="text-sm text-gray-500">
+                                        Tipe/Jenis: {post.tipe && post.jenis ? `${post.tipe} / ${post.jenis}` : post.tipe || post.jenis}
+                                        </p>
                                         <p className="text-sm text-gray-500">Stok : {post.stock}</p>
                                         <p className="text-sm text-gray-500">Rp {post.promo != 0 ? post.harga * (100 - post.promo) / 100 : post.harga}</p>
                                         <div className="flex items-center gap-2 mt-2">

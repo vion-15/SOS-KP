@@ -250,39 +250,52 @@ export default function ReportPage() {
                         <p><span className="font-semibold">{reportData.totalFavoritQuantity}</span> pcs</p>
                     </div>
                 </div>
-            
 
-            <div className="mt-6">
-                <h2 className="text-xl font-semibold mb-2">Menu yang Terjual :</h2>
-                <table className="w-full text-sm border-collapse">
-                    <thead>
-                        <tr className="bg-gray-100">
-                            <th className="border px-2 py-1">Nama Menu</th>
-                            <th className="border px-2 py-1">Jumlah Terjual</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Object.entries(
-                            reportData.transaksi.reduce((acc, trx) => {
-                                trx.items.forEach(item => {
-                                    if (!acc[item.judul]) {
-                                        acc[item.judul] = 0;
-                                    }
-                                    acc[item.judul] += item.quantity;
-                                });
-                                return acc;
-                            }, {})
-                        )
-                            .sort((a, b) => b[1] - a[1]) // sort descending by quantity
-                            .map(([menu, qty]) => (
-                                <tr key={menu}>
-                                    <td className="border px-2 py-1">{menu}</td>
-                                    <td className="border px-2 py-1">{qty} pcs</td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
-            </div>
+
+                <div className="mt-6">
+                    <h2 className="text-xl font-semibold mb-2">Menu yang Terjual :</h2>
+                    <table className="w-full text-sm border-collapse">
+                        <thead>
+                            <tr className="bg-gray-100">
+                                <th className="border px-2 py-1">Nama Menu</th>
+                                <th className="border px-2 py-1">Tipe</th>
+                                <th className="border px-2 py-1">Jenis</th>
+                                <th className="border px-2 py-1">Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Object.entries(
+                                reportData.transaksi.reduce((acc, trx) => {
+                                    trx.items.forEach(item => {
+                                        const judul = item.judul || "-";
+                                        const tipe = item.tipe || "-";
+                                        const jenis = item.jenis || "-";
+                                        const key = `${judul}||${tipe}||${jenis}`;
+
+                                        if (!acc[key]) {
+                                            acc[key] = 0;
+                                        }
+
+                                        acc[key] += item.quantity;
+                                    });
+                                    return acc;
+                                }, {})
+                            )
+                                .sort((a, b) => b[1] - a[1]) // sort descending by quantity
+                                .map(([key, qty]) => {
+                                    const [judul, tipe, jenis] = key.split("||");
+                                    return (
+                                        <tr key={key}>
+                                            <td className="border px-2 py-1">{judul}</td>
+                                            <td className="border px-2 py-1">{tipe}</td>
+                                            <td className="border px-2 py-1">{jenis}</td>
+                                            <td className="border px-2 py-1">{qty} pcs</td>
+                                        </tr>
+                                    );
+                                })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div className="mt-6">

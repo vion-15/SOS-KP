@@ -229,6 +229,7 @@ const ProductGrid = ({ products, isFiltered }) => {
 
                         {/* Jenis section, will only show if jenis exists */}
                         {popupItem.jenis && (
+                            (popupItem.jenis.panas > 0 || popupItem.jenis.dingin > 0) && (
                             <div className="mb-4">
                                 <p className="font-medium text-sm mb-2">Pilih Jenis:</p>
                                 <div className="flex gap-4">
@@ -250,10 +251,12 @@ const ProductGrid = ({ products, isFiltered }) => {
                                     )}
                                 </div>
                             </div>
+                            )
                         )}
 
                         {/* Tipe section, will show regardless of jenis */}
                         {popupItem.tipe && (
+                            (popupItem.tipe.houseBlend > 0 || popupItem.tipe.singelOrigin > 0) && (
                             <div className="mb-4">
                                 <p className="font-medium text-sm mb-2">Pilih Tipe:</p>
                                 <div className="flex gap-4">
@@ -275,6 +278,7 @@ const ProductGrid = ({ products, isFiltered }) => {
                                     )}
                                 </div>
                             </div>
+                            )
                         )}
 
                         <div className="flex justify-end gap-3">

@@ -14,6 +14,12 @@ const keranjangSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        tipe: {
+            type: String,
+        },
+        jenis: {
+            type: String,
+        },
         harga: {
             type: Number,
             required: true,

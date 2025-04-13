@@ -8,6 +8,8 @@ const reportSchema = new mongoose.Schema(
         items: [
             {
                 judul: { type: String, required: true },
+                tipe: { type: String},
+                jenis: { type: String},
                 stock: { type: Number, required: true },
                 harga: { type: Number, required: true },
                 quantity: {type: Number, required: true},
