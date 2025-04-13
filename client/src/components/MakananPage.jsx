@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import CardMakanan from "./CardMakanan";
 import Keranjang from "./Keranjang";
+import FooterCom from "./Footer";
 
 export default function MakananPage() {
     const [products, setProducts] = useState([]);
@@ -114,6 +115,8 @@ export default function MakananPage() {
                     <CardMakanan products={products} />
                 </div>
             </div>
+
+            <FooterCom />
         </>
     )
 }

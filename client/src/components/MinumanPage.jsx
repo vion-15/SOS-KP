@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import CardMinuman from "./CardMinuman";
 import Keranjang from "./Keranjang";
+import FooterCom from "./Footer";
 
 export default function MinumanPage() {
     const [products, setProducts] = useState([]);
@@ -114,6 +115,8 @@ export default function MinumanPage() {
                     <CardMinuman products={products} />
                 </div>
             </div>
+
+            <FooterCom />
         </>
     )
 }

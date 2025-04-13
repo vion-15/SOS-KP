@@ -7,6 +7,7 @@ import ProductGrid from "../components/CardProduk";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Keranjang from "../components/Keranjang";
+import FooterCom from "../components/Footer";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
@@ -125,6 +126,8 @@ export default function Home() {
                     <ProductGrid products={products} />
                 </div>
             </div>
+
+            <FooterCom />
 
         </>
     );
