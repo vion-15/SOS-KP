@@ -122,17 +122,17 @@ export default function Inventory() {
                                         <Table.Cell>{post.category}</Table.Cell>
 
                                         <Table.Cell>
-                                            {typeof post.harga === "number" && typeof post.promo === "number"
-                                                ? post.promo > 0
-                                                    ? ((post.harga * (100 - post.promo)) / 100).toLocaleString()
-                                                    : post.harga.toLocaleString()
-                                                : "0"}
+                                            {typeof post.harga === "number"
+                                                ? (post.promo && typeof post.promo === "number" && post.promo > 0
+                                                    ? ((post.harga * (100 - post.promo)) / 100) : post.harga
+                                                ).toLocaleString() : "0"
+                                            }
                                         </Table.Cell>
 
 
                                         <Table.Cell>{post.stock}</Table.Cell>
 
-                                        <Table.Cell>{post.promo}</Table.Cell>
+                                        <Table.Cell>{(post.promo ?? 0) + "%"}</Table.Cell>
 
                                         <Table.Cell>
                                         {typeof post.jenis.panas === "number" && typeof post.promo === "number"

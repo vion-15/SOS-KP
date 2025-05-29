@@ -8,7 +8,7 @@ import 'react-circular-progressbar/dist/styles.css';
 
 export default function AddMenu() {
     const [formData, setFormData] = useState({
-        harga: '',
+        harga: ''
     });
     const [file, setFile] = useState(null);
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
@@ -86,8 +86,7 @@ export default function AddMenu() {
     }, [isJenisChecked, isTipeChecked]);
 
     return (
-        <div className="p-3 max-w-3xl
-        mx-auto min-h-screen">
+        <div className="p-3 max-w-3xl mx-auto min-h-screen">
             <div className='flex flex-row justify-between mt-10 mb-10 pb-4 border-b-4'>
                     <h2 className="text-2xl font-bold">Add Menu</h2>
                     <Link to='/inventory'>
@@ -113,8 +112,9 @@ export default function AddMenu() {
                 </div>
                 <Label htmlFor="harga" value="Harga :" />
                 <TextInput type='number' placeholder='Harga'
-                    id='harga' className='flex-1' value={formData.harga}
+                    id='harga' className='flex-1'
                     disabled={isJenisChecked || isTipeChecked}
+                    value={formData.harga}
                     onChange={(e) => setFormData({ ...formData, harga: e.target.value })} />
 
                 <Label value="Jenis Minuman & Harga:" />

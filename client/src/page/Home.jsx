@@ -38,7 +38,7 @@ export default function Home() {
 
                 setProducts(data.posts);
                 setFilteredProducts(data.posts);
-                setProductCount(data.posts.length);
+                setProductCount(data.totalPosts);
                 setMakananCount(kategorimakanan.length);
                 setMinumanCount(kategoriminuman.length);
                 setDessertCount(kategoridessert.length);
@@ -46,13 +46,12 @@ export default function Home() {
                 console.error("Gagal ambil data menu:", err);
             }
         };
-
         getMenu();
     }, []);
 
     const filterByCategory = (category) => {
         if (category === "All") {
-            setFilteredProducts(products); // Show all products
+            setFilteredProducts(products); 
         } else {
             setFilteredProducts(products.filter(product => product.category === category));
         }

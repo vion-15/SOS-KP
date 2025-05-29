@@ -12,7 +12,9 @@ export default function Header() {
     const dispatch = useDispatch();
     const { isOpen } = useSelector((state) => state.storeStatus);
     const [showClosedModal, setShowClosedModal] = useState(false);
+    const [statusToko, setStatusToko] = useState(false);
 
+    //mengambil data status toko
     useEffect(() => {
         const fetchStoreStatus = async () => {
             try {
@@ -23,17 +25,23 @@ export default function Header() {
                 }
             } catch (error) {
                 console.log('error fetching data : ', error);
+            } finally {
+                setStatusToko(true);
             }
         };
 
         fetchStoreStatus();
     }, [dispatch]);
 
+    //menambahkan efek jeda sebelum modal
     useEffect(() => {
-        if(!isOpen){
-            setShowClosedModal(true);
+        if(statusToko && !isOpen){
+            const timeout = setTimeout(() => {
+                setShowClosedModal(true);
+            }, 300);
+            return () => clearTimeout(timeout);
         }
-    }, [isOpen]);
+    }, [isOpen, statusToko]);
 
     return (
         <header className='sticky top-0 z-50'>
@@ -75,7 +83,9 @@ export default function Header() {
                     <p className='text-red-600 font-bold'>CLOSED</p>
                 </Modal.Header>
                 <Modal.Body>
-                <p className='text-xl'>Maaf, toko masih tutup. Tolong akses web ini jika toko sudah buka dan pastikan lokasi Anda berada di sekitar toko.</p>
+                <p className='text-xl'>
+                    Maaf, toko masih tutup. 
+                    Tolong akses web ini jika toko sudah buka dan pastikan lokasi Anda berada di sekitar toko.</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={() => setShowClosedModal(false)}

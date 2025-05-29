@@ -11,11 +11,15 @@ export default function Keranjang() {
     const cartItems = useSelector((state) => state.cart.cartItems);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    console.log(cartItems);
     const cartCount = useSelector(selectCartCount);
     const [username, setUsername] = useState('');
     const [meja, setMeja] = useState('');
     const [email, setEmail] = useState('');
+    const [paymentStatus, setPaymentStatus] = useState({ show: false, message: '' });
+
+    const closePaymentStatusModal = () => {
+        setPaymentStatus({ show: false, message: '' });
+    };
 
     const handleList = () => {
         setShowModal(true);
@@ -45,15 +49,13 @@ export default function Keranjang() {
                     return {
                         ...item,
                         quantity: item.quantity - 1,
-                        stock: item.stock + 1, // Mengembalikan stok
+                        stock: item.stock + 1
                     };
-                } else {
-                    alert("Quantity tidak bisa kurang dari 0");
                 }
             }
             return item;
         });
-        dispatch(setCartItems(updatedItems)); // Perbarui cartItems di Redux
+        dispatch(setCartItems(updatedItems));
     };
 
     const handleIncrease = (id) => {
@@ -208,8 +210,8 @@ export default function Keranjang() {
                             <option value="5">5</option>
                         </Select>
                         <Label htmlFor="email" value="E-mail (untuk bukti transaksi)" />
-                        <TextInput required type="email" placeholder="E-mail" value={email} 
-                        onChange={(e) => setEmail(e.target.value)}></TextInput>
+                        <TextInput required type="email" placeholder="E-mail" value={email}
+                            onChange={(e) => setEmail(e.target.value)}></TextInput>
                         <div className="text-center mt-5 bg-red-500 rounded-lg">
                             <h2 className="text-white font-semibold p-5">Jika Email tidak muncul di Inbox, Tolong cek di Spam</h2>
                         </div>
@@ -226,13 +228,14 @@ export default function Keranjang() {
                                     <div className="flex-1">
                                         <p className="text-sm font-semibold text-gray-800">{post.judul}</p>
                                         <p className="text-sm text-gray-500">
-                                        Tipe/Jenis: {post.tipe && post.jenis ? `${post.tipe} / ${post.jenis}` : post.tipe || post.jenis}
+                                            Tipe/Jenis: {post.tipe && post.jenis ? `${post.tipe} / ${post.jenis}` : post.tipe || post.jenis}
                                         </p>
                                         <p className="text-sm text-gray-500">Stok : {post.stock}</p>
                                         <p className="text-sm text-gray-500">Rp {post.promo != 0 ? post.harga * (100 - post.promo) / 100 : post.harga}</p>
                                         <div className="flex items-center gap-2 mt-2">
                                             <Button
                                                 onClick={() => handleDecrease(post._id)}
+                                                disabled={post.quantity < 0}
                                                 className="p-1 bg-gray-200 text-gray-600 rounded-full"
                                             >
                                                 -
@@ -295,13 +298,13 @@ export default function Keranjang() {
                                                     navigate('/');
                                                 },
                                                 onPending: function () {
-                                                    alert("Menunggu pembayaran");
+                                                    setPaymentStatus({ show: true, message: "Menunggu pembayaran" });
                                                 },
                                                 onError: function () {
-                                                    alert("Pembayaran gagal");
+                                                    setPaymentStatus({ show: true, message: "Pembayaran gagal" });
                                                 },
                                                 onClose: function () {
-                                                    alert("Kamu menutup popup tanpa menyelesaikan pembayaran");
+                                                    setPaymentStatus({ show: true, message: "Kamu menutup popup tanpa menyelesaikan pembayaran" });
                                                 }
                                             });
 
@@ -319,6 +322,18 @@ export default function Keranjang() {
                     ) : (
                         <p className="mt-10 text-2xl text-center text-gray-500">Keranjang kosong</p>
                     )}
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={paymentStatus.show} onClose={closePaymentStatusModal} size="sm" popup>
+                <Modal.Header />
+                <Modal.Body>
+                    <div className="text-center">
+                        <h3 className="mb-5 text-lg font-normal text-gray-500">{paymentStatus.message}</h3>
+                        <div className="flex justify-center">
+                            <Button onClick={closePaymentStatusModal}>Tutup</Button>
+                        </div>
+                    </div>
                 </Modal.Body>
             </Modal>
         </>
