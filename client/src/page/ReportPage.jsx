@@ -15,6 +15,7 @@ export default function ReportPage() {
     const [showAllTransactions, setShowAllTransactions] = useState(false);
     const reportRef = useRef();
 
+    //mengambil semua data laporan
     useEffect(() => {
         const fetchReportData = async () => {
             try {
@@ -33,6 +34,7 @@ export default function ReportPage() {
         return () => clearInterval(intervalId);
     }, []);
 
+    //fungsi membandingkan laporan hari ini dengan kemarin
     useEffect(() => {
         const fetchCompareData = async () => {
             try {
@@ -56,6 +58,7 @@ export default function ReportPage() {
         return () => clearInterval(intervalId);
     }, []);
 
+    //mengambil semua data laporan hari ini
     useEffect(() => {
         const dayReport = async () => {
             try {
@@ -73,6 +76,7 @@ export default function ReportPage() {
         return () => clearInterval(intervalId);
     }, []);
 
+    //fungsi perbandingan
     const getDifference = (todayVal, yesterdayVal) => {
         if (todayVal == null || yesterdayVal == null) return "-";
         const diff = todayVal - yesterdayVal;
@@ -81,8 +85,10 @@ export default function ReportPage() {
         return <span className={`text-sm ${color}`}>{isUp ? "↑" : "↓"} {Math.abs(diff)}</span>;
     };
 
+    //efek loading
     if (!reportData) return <p>Loading...</p>;
 
+    //membuat data laporan hari ini lalu menyimpan ke DB
     const handlePost = async () => {
 
         const dataToSend = {
@@ -120,6 +126,7 @@ export default function ReportPage() {
         }
     };
 
+    //mendelete order yang masuk
     const handleDelete = async () => {
         try {
             const res = await fetch('/api/report/deleteorder', {
@@ -129,7 +136,7 @@ export default function ReportPage() {
             const data = await res.json();
 
             if (res.ok) {
-                console.log(data.message); // atau tampilkan notifikasi sukses
+                console.log(data.message);
             } else {
                 console.error(data.message);
             }
@@ -138,6 +145,7 @@ export default function ReportPage() {
         }
     };
 
+    //fungsi export ke pdf
     const handleDownloadPDF = () => {
         const element = reportRef.current;
         const opt = {
@@ -149,8 +157,6 @@ export default function ReportPage() {
         };
         html2pdf().set(opt).from(element).save();
     };
-
-
 
     return (
         <div className="p-6 space-y-6">

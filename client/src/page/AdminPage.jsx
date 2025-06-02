@@ -11,6 +11,7 @@ export default function AdminPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    //fungsi submit dan  verifikasi data user ke DB untuk login
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(!formData.username || !formData.password) {
@@ -44,6 +45,7 @@ export default function AdminPage() {
         }
     };
 
+    //menghadle perubahan field dan menyimpannya ke state
     const handleChange = (e) => {
         setFormData({...formData,[e.target.id]: e.target.value.trim() });
     };

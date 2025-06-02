@@ -11,6 +11,7 @@ export default function Inventory() {
     const [postIdToDelete, setPostIdToDelete] = useState('');
     const [showMore, setShowMore] = useState(true);
 
+    //mengambil semua data menu di DB
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -33,6 +34,7 @@ export default function Inventory() {
 
     }, [currentUser._id]);
 
+    //fungsi dari tombol "show more"
     const handleShowMore = async () => {
         const startIndex = userPosts.length;
         try {
@@ -49,6 +51,7 @@ export default function Inventory() {
         }
     };
 
+    //fungsi delete menu
     const handleDeletePost = async () => {
         setShowModal(false);
         try {

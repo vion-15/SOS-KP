@@ -10,6 +10,7 @@ const ProductGrid = ({ products, isFiltered }) => {
     const [selectedJenis, setSelectedJenis] = useState('');
     const [selectedTipe, setSelectedTipe] = useState('');
 
+    //mengambil semua data menu
     useEffect(() => {
         const getMenu = async () => {
             try {
@@ -26,6 +27,7 @@ const ProductGrid = ({ products, isFiltered }) => {
         }
     }, [isFiltered]);
 
+    //fungsi jika ada tipe dan jenis
     const handleAddToCart = async (product) => {
         const hasJenis = product.jenis?.panas || product.jenis?.dingin;
         const hasTipe = product.tipe?.houseBlend || product.tipe?.singelOrigin;
@@ -39,6 +41,7 @@ const ProductGrid = ({ products, isFiltered }) => {
         }
     };
 
+    //fungsi memilih tipe dan jenis
     const handleConfirmAdd = () => {
         if (!selectedJenis && popupItem?.jenis && (popupItem.jenis.panas || popupItem.jenis.dingin)) {
             alert("Pilih jenis terlebih dahulu!");
@@ -54,10 +57,12 @@ const ProductGrid = ({ products, isFiltered }) => {
         setPopupItem(null);
     };
 
+    //fungsi menambahkan menu ke keranjang
     const addProductToCart = async (product, harga, jenis, tipe) => {
         try {
+            const {_id, ...productTanpaId} = product; 
             const productToSend = {
-                ...product,
+                ...productTanpaId,
                 harga,
                 jenis,
                 tipe,
@@ -72,7 +77,7 @@ const ProductGrid = ({ products, isFiltered }) => {
 
             const data = await res.json();
             if (res.ok) {
-                dispatch(addItemToCart(productToSend));
+                dispatch(addItemToCart(data));
                 console.log("Berhasil ditambah:", data);
             } else {
                 console.log("Gagal ditambah:", data.message);
@@ -82,8 +87,10 @@ const ProductGrid = ({ products, isFiltered }) => {
         }
     };
 
+    //fungsi menampilkan produk
     const displayProducts = isFiltered ? products : allProducts;
 
+    //fungsi menghitung harga promo %
     const getHargaDiskon = (harga, promo) => (
         Math.round(harga * (100 - promo) / 100)
     );

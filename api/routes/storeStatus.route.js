@@ -4,8 +4,8 @@ import { updateStoreStatus, getStoreStatus, updateStoreStatusOnLogout } from '..
 
 const router = express.Router();
 
-router.get('/status', getStoreStatus); // untuk ambil status toko
-router.patch('/status', updateStoreStatus); // untuk update status toko
+router.get('/status', getStoreStatus); 
+router.patch('/status', updateStoreStatus); 
 router.patch('/logout', updateStoreStatusOnLogout);
 
 export default router;

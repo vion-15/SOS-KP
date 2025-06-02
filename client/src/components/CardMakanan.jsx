@@ -10,10 +10,11 @@ const CardMakanan = ({ products, isFiltered }) => {
     const [selectedJenis, setSelectedJenis] = useState('');
     const [selectedTipe, setSelectedTipe] = useState('');
 
+    //mengambil data menu berdasarkan kategori
     useEffect(() => {
         const getMenu = async () => {
             try {
-                const res = await fetch("/api/post/getposts"); // Sesuaikan dengan endpoint kamu
+                const res = await fetch("/api/post/getposts"); 
                 const data = await res.json();
                 const makananFilter = data.posts.filter(products => products.category === "Makanan");
                 setMakananCount(makananFilter);
@@ -25,6 +26,7 @@ const CardMakanan = ({ products, isFiltered }) => {
         getMenu();
     }, []);
 
+    //fungsi jika ada jenis dan tipe
     const handleAddToCart = async (product) => {
         const hasJenis = product.jenis?.panas || product.jenis?.dingin;
         const hasTipe = product.tipe?.houseBlend || product.tipe?.singelOrigin;
@@ -38,6 +40,7 @@ const CardMakanan = ({ products, isFiltered }) => {
         }
     };
 
+    //fungsi menambahkan menu sesuai dengan jenis dan tipe yang dipilih jika ada
     const handleConfirmAdd = () => {
         if (!selectedJenis && popupItem?.jenis && (popupItem.jenis.panas || popupItem.jenis.dingin)) {
             alert("Pilih jenis terlebih dahulu!");
@@ -53,10 +56,12 @@ const CardMakanan = ({ products, isFiltered }) => {
         setPopupItem(null);
     };
 
+    //menambahkan menu ke keranjang
     const addProductToCart = async (product, harga, jenis, tipe) => {
         try {
+            const {_id, ...productTanpaId} = product; 
             const productToSend = {
-                ...product,
+                ...productTanpaId,
                 harga,
                 jenis,
                 tipe,
@@ -71,7 +76,7 @@ const CardMakanan = ({ products, isFiltered }) => {
 
             const data = await res.json();
             if (res.ok) {
-                dispatch(addItemToCart(productToSend));
+                dispatch(addItemToCart(data));
                 console.log("Berhasil ditambah:", data);
             } else {
                 console.log("Gagal ditambah:", data.message);
@@ -81,8 +86,10 @@ const CardMakanan = ({ products, isFiltered }) => {
         }
     };
 
+    //menampilkan menu berdasarkan kategori
     const displayProducts = isFiltered ? products : makananCount;
 
+    //menghitung harga promo %
     const getHargaDiskon = (harga, promo) => (
         Math.round(harga * (100 - promo) / 100)
     );

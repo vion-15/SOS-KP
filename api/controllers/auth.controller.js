@@ -4,7 +4,6 @@ import { errorHandler } from "../utils/error.js";
 import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res, next) => {
-    console.log(req.body);
     const {username, password} = req.body;
     if(!username || !password || username === '' || password === ''){
         return next(errorHandler(400, 'Semua field harus diisi'));

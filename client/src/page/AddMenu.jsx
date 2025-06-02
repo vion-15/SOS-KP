@@ -18,6 +18,7 @@ export default function AddMenu() {
     const [isJenisChecked, setIsJenisChecked] = useState(false);
     const [isTipeChecked, setIsTipeChecked] = useState(false);
 
+    //mengirim data menu ke DB
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -43,6 +44,7 @@ export default function AddMenu() {
         }
     };
 
+    //fungsi upload image ke firebase
     const handleUploadImage = async () => {
         try {
             if (!file) {
@@ -79,6 +81,7 @@ export default function AddMenu() {
         }
     };
 
+    //memfilter menu yang ada harga jenis dan tipe
     useEffect(() => {
         if (isJenisChecked || isTipeChecked) {
             setFormData((prev) => ({ ...prev, harga: 0, promo: 0, }));

@@ -6,8 +6,8 @@ export const sendEmailConfirmation = async (username, meja, email, items, totalH
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.EMAIL_USER,  // Ganti dengan email kamu
-            pass: process.env.EMAIL_PASS,   // Ganti dengan password email kamu
+            user: process.env.EMAIL_USER,  // Ganti dengan email
+            pass: process.env.EMAIL_PASS,   // Ganti dengan password email
         },
     });
 

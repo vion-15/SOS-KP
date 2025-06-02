@@ -28,15 +28,14 @@ export default function UpdateMenu() {
     const { currentUser } = useSelector((state) => state.user);
     const [isJenisChecked, setIsJenisChecked] = useState(false);
     const [isTipeChecked, setIsTipeChecked] = useState(false);
-    console.log(formData);
 
+    //mengambil data menu berdasarkan id
     useEffect(() => {
         try {
             const fetchPost = async () => {
                 const res = await fetch(`/api/post/getposts?postId=${postId}`);
                 const data = await res.json();
                 if (!res.ok) {
-                    console.log(data.message);
                     setPublishError(data.message);
                     return;
                 }
@@ -51,6 +50,7 @@ export default function UpdateMenu() {
         }
     }, [postId]);
 
+    //fungsi upload gambar
     const handleUploadImage = async () => {
         try {
             if (!file) {
@@ -87,6 +87,7 @@ export default function UpdateMenu() {
         }
     };
 
+    //fungsi submit perubahan data menu dan menyimpan ke DB
     const handleSubmit = async (e) => {
         e.preventDefault();
         const submitData = {

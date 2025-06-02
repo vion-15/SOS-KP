@@ -7,8 +7,6 @@ export const createTransaction = async (req, res) => {
             serverKey: process.env.MIDTRANS_SERVER_KEY,
         });
         
-        console.log(process.env.MIDTRANS_SERVER_KEY);
-        
         const { username, meja, totalHarga, items } = req.body;
 
         const orderId = `ORDER-${Math.floor(Math.random() * 1000000)}`;
@@ -32,15 +30,14 @@ export const createTransaction = async (req, res) => {
 
         const transaction = await snap.createTransaction(parameter);
         const snapToken = transaction.token;
-        console.log(transaction.token);
         res.status(200).json({ token: snapToken, order_id: orderId });
 
     } catch (error) {
-        console.error("Gagal membuat transaksi:", error); // ini untuk log detail di terminal
+        console.error("Gagal membuat transaksi:", error); 
         res.status(500).json({
             success: false,
             message: "Gagal membuat transaksi",
-            error: error.message, // hanya kirim pesan error, bukan seluruh object
+            error: error.message, 
         });
     }
 };

@@ -8,10 +8,11 @@ export default function Activity() {
     const [loading, setLoading] = useState(true);
     const [tab, setTab] = useState('unfinished');
 
+    //mengambil data pesanan
     useEffect(() => {
         const fetchReports = async () => {
             try {
-                const res = await fetch('/api/report/getreport'); // Ganti sesuai endpointmu
+                const res = await fetch('/api/report/getreport');
                 if (!res.ok) {
                     throw new Error('Gagal mengambil data laporan');
                 }
@@ -27,6 +28,7 @@ export default function Activity() {
         fetchReports();
     }, []);
 
+    //mengupdate status data pesanan
     const handleDone = async (id) => {
         try {
             const res = await fetch(`/api/report/done/${id}`, {
@@ -45,8 +47,10 @@ export default function Activity() {
         }
     };
 
+    //memfilter pesanan berdasarkan status
     const filteredReports = reports.filter(report => tab === 'unfinished' ? !report.isDone : report.isDone);
 
+    //efek loading
     if (loading) return <p className="p-4">Loading...</p>;
 
     return (

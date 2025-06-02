@@ -9,13 +9,13 @@ export default function SearchActivity({tab}) {
     const [allProducts, setAllProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
 
+    //mengambil data pesanan
     useEffect(() => {
         const fetchAllProducts = async () => {
             try {
                 const res = await fetch("/api/report/getreport");
                 const data = await res.json();
                 setAllProducts(data);
-                console.log(data);
             } catch (error) {
                 console.error("Gagal fetch:", error.message);
             }
@@ -23,6 +23,7 @@ export default function SearchActivity({tab}) {
         fetchAllProducts();
     }, []);
 
+    //query search menu
     useEffect(() => {
         if (searchQuery.trim() === "") {
             setFilteredProducts([]);
@@ -36,6 +37,7 @@ export default function SearchActivity({tab}) {
         setFilteredProducts(filtered);
     }, [searchQuery, allProducts]);
 
+    //menambahkan menu
     const handleAddToCart = (product) => {
         console.log("Tambah ke keranjang:", product.judul);
     };

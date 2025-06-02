@@ -25,6 +25,7 @@ export default function Keranjang() {
         setShowModal(true);
     };
 
+    //fungsi mengambil data item yang ada di keranjang
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
@@ -32,7 +33,6 @@ export default function Keranjang() {
                 const data = await res.json();
                 if (res.ok) {
                     dispatch(setCartItems(data));
-                    console.log(data);
                 }
             } catch (error) {
                 console.error("Gagal memuat keranjang", error);
@@ -42,6 +42,7 @@ export default function Keranjang() {
         fetchCartItems();
     }, [dispatch]);
 
+    //fungsi menurunkan quantity item
     const handleDecrease = (id) => {
         const updatedItems = cartItems.map((item) => {
             if (item._id === id) {
@@ -58,6 +59,7 @@ export default function Keranjang() {
         dispatch(setCartItems(updatedItems));
     };
 
+    //fungsi menaikan quantity item
     const handleIncrease = (id) => {
         const updatedItems = cartItems.map((item) => {
             if (item._id === id) {
@@ -76,6 +78,7 @@ export default function Keranjang() {
         dispatch(setCartItems(updatedItems)); // Perbarui cartItems di Redux
     };
 
+    //fungsi mendelete item berdasarkan id
     const handleDelete = async (id) => {
         try {
             const res = await fetch(`/api/cart/deletelist/${id}`, {
@@ -90,17 +93,20 @@ export default function Keranjang() {
         }
     };
 
+    //fungsi mengembalikan total item + total harga
     const getTotalKeranjang = () => {
         return cartItems.reduce((total, post) => {
             return total + getTotalHarga(post.harga, post.quantity, post.promo);
         }, 0);
     };
 
+    //menghitung total harga
     const getTotalHarga = (harga, quantity, promo = 0) => {
         const hargaFinal = promo !== 0 ? harga * (100 - promo) / 100 : harga;
         return hargaFinal * quantity;
     };
 
+    //handle update data menu
     const handleUpdate = async (itemId, stock, quantity) => {
         try {
             const res = await fetch(`/api/post/update/${itemId}`, {
@@ -123,6 +129,7 @@ export default function Keranjang() {
         }
     };
 
+    //mengirim data pesanan
     const handlePost = async (result) => {
         // Mengambil semua item dari keranjang
         if (!username.trim() || !meja || meja === 'uncategorized') {
@@ -140,8 +147,6 @@ export default function Keranjang() {
             harga: item.promo !== 0 ? item.harga * (100 - item.promo) / 100 : item.harga,
             totalHargaItem: getTotalHarga(item.harga, item.quantity, item.promo), // Total harga untuk item ini
         }));
-
-        console.log(cartItems.items);
 
         // Menghitung total harga keseluruhan
         const totalHarga = getTotalKeranjang();
@@ -219,7 +224,7 @@ export default function Keranjang() {
                     {cartItems.length > 0 ? (
                         <>
                             {cartItems.map((post) => (
-                                <div key={post._id} className="flex items-center gap-4 p-3 border-b">
+                                <div key={`${post._id}-${post.tipe}-${post.jenis}`} className="flex items-center gap-4 p-3 border-b">
                                     <img
                                         src={post.image}
                                         alt="gambar"
@@ -230,7 +235,7 @@ export default function Keranjang() {
                                         <p className="text-sm text-gray-500">
                                             Tipe/Jenis: {post.tipe && post.jenis ? `${post.tipe} / ${post.jenis}` : post.tipe || post.jenis}
                                         </p>
-                                        <p className="text-sm text-gray-500">Stok : {post.stock}</p>
+                                        <p className="text-sm text-gray-500">Stok : {post.stock - 1}</p>
                                         <p className="text-sm text-gray-500">Rp {post.promo != 0 ? post.harga * (100 - post.promo) / 100 : post.harga}</p>
                                         <div className="flex items-center gap-2 mt-2">
                                             <Button

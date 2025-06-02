@@ -31,7 +31,7 @@ export default function MenuAdmin() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-
+    //fungsi handle perubahan gambar admin
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -40,6 +40,7 @@ export default function MenuAdmin() {
         }
     };
 
+    //fungsi upload image
     useEffect(() => {
         if (imageFile) {
             uploadImage();
@@ -86,6 +87,7 @@ export default function MenuAdmin() {
         );
     };
 
+    //handle submit perubahan
     const handleSubmit = async (e) => {
         e.preventDefault();
         setUpdateUserError(null);
@@ -122,6 +124,7 @@ export default function MenuAdmin() {
         }
     };
 
+    //fungsi logout
     const handleSignout = async () => {
         try {
             // Logout user
@@ -153,7 +156,7 @@ export default function MenuAdmin() {
         }
     };
     
-
+    //menyimpan perubahan field ke state
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
     };

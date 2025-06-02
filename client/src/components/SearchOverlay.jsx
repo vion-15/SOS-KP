@@ -9,11 +9,12 @@ export default function SearchOverlay() {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [isFiltered, setIsFiltered] = useState(false);
 
+    //mengambil data menu berdasarkan query
     useEffect(() => {
         const fetchFilteredProducts = async () => {
             if (searchQuery.trim() === "") {
-                setIsFiltered(false); // Tidak ada hasil pencarian
-                setFilteredProducts([]); // Kosongkan produk
+                setIsFiltered(false);
+                setFilteredProducts([]);
                 return;
             }
 
@@ -30,6 +31,7 @@ export default function SearchOverlay() {
         fetchFilteredProducts();
     }, [searchQuery]);
 
+    //handle close search state
     const handleClose = () => {
         setShowSearch(false);
         setSearchQuery("")
@@ -49,9 +51,15 @@ export default function SearchOverlay() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
 
-                    <p className="text-center mt-5 text-gray-600">Mohon maaf menu yang kamu cari tidak tersedia</p>
+                    {filteredProducts.length === 0 && (
+                        <p className="text-center mt-5 text-gray-600">
+                            Mohon maaf menu yang kamu cari tidak tersedia
+                        </p>
+                    )}
 
-                    <SearchResultGrid products={filteredProducts} />
+                    {filteredProducts.length > 0 && (
+                        <SearchResultGrid products={filteredProducts} />
+                    )}
                 </Modal.Body>
             </Modal>
 

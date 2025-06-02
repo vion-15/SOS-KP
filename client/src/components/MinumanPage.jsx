@@ -20,15 +20,16 @@ export default function MinumanPage() {
 
     const isActive = (path) => currentLocation === path;
 
+    //mengambil data menu dan memfilter berdasarkan kategori
     useEffect(() => {
         const getMenu = async () => {
             try {
-                const res = await fetch("/api/post/getposts"); // Sesuaikan dengan endpoint kamu
+                const res = await fetch("/api/post/getposts"); 
                 const data = await res.json();
                 const kategorimakanan = data.posts.filter(products => products.category === "Makanan");
                 const kategoriminuman = data.posts.filter(products => products.category === "Minuman");
                 const kategoridessert = data.posts.filter(products => products.category === "Dessert");
-                setProducts(data.posts); // Pastikan sesuai struktur respon
+                setProducts(data.posts); 
                 setProductCount(data.posts.length);
                 setMakananCount(kategorimakanan.length);
                 setMinumanCount(kategoriminuman.length);

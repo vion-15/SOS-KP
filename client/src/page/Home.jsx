@@ -18,8 +18,10 @@ export default function Home() {
     const [dessertCount, setDessertCount] = useState(0);
     const location = useLocation();
 
+    //mengambil lokasi user saat ini
     const isActive = (path) => location.pathname === path;
 
+    //mengambil semua data makanan + memfilter berdasarkan kategori
     useEffect(() => {
         const getMenu = async () => {
             try {
@@ -49,6 +51,7 @@ export default function Home() {
         getMenu();
     }, []);
 
+    //menampilkan makanan sesuai kategori
     const filterByCategory = (category) => {
         if (category === "All") {
             setFilteredProducts(products); 
