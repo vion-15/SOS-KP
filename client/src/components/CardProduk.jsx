@@ -97,7 +97,7 @@ const ProductGrid = ({ products, isFiltered }) => {
 
     return (
         <>
-            <div className="grid grid-cols-3 gap-4 p-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4">
                 {displayProducts.map((product) => {
                     const baseHarga = product.harga;
                     const panas = product.jenis?.panas || null;

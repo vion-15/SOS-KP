@@ -259,8 +259,13 @@ export default function Keranjang() {
                                                 Delete
                                             </span>
                                         </div>
+                                        <div className="flex flex-col sm:hidden mt-2"> 
+                                            <p className="text-sm font-semibold">
+                                                Total: Rp {getTotalHarga(post.harga, post.quantity, post.promo)}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col items-end">
+                                    <div className="sm:flex flex-col hidden">
                                         <p className="text-sm font-semibold">
                                             Total: Rp {getTotalHarga(post.harga, post.quantity, post.promo)}
                                         </p>

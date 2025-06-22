@@ -65,7 +65,7 @@ export default function Header() {
                         <Link to={isAdminLogin ? '/menuAdmin' : '/AdminLogin'}>
                         <div className={`flex flex-row items-center
                         gap-2 bg-white px-5 py-2 rounded-full
-                        ${isAdminLogin ? 'text-green-500' :  'text-red-500'}`}>
+                        ${isOpen ? 'text-green-500' :  'text-red-500'}`}>
                             <h2>{isOpen ? 'Open' : 'Closed'}</h2>
                             <FaPowerOff 
                             color={isOpen? 'green' : 'red'}/>
